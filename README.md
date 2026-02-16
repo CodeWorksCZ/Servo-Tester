@@ -45,11 +45,11 @@ RC servo tester for Arduino Pro Mini (ATmega328P, 16 MHz) with OLED UI, settings
 - `A4`: I2C `SDA` (INA3221)
 - `A5`: I2C `SCL` (INA3221)
 
-Full mapping is in `Servo Tester/pins.txt`.
+Full mapping is in `pins.txt`.
 
 ## Configuration
 
-Main configuration is in `Servo Tester/include/config.h`.
+Main configuration is in `include/config.h`.
 
 You can adjust:
 
@@ -64,7 +64,7 @@ You can adjust:
 
 PlatformIO environment:
 
-- file: `Servo Tester/platformio.ini`
+- file: `platformio.ini`
 - env: `pro16MHzatmega328`
 
 Libraries used:
@@ -76,10 +76,10 @@ Libraries used:
 
 ## Project Layout
 
-- `Servo Tester/src/main.cpp`: app orchestration and state machine
-- `Servo Tester/src/display_ui.*`: OLED rendering
-- `Servo Tester/src/ina_monitor.*`: INA3221 handling and peak tracking
-- `Servo Tester/src/button_input.*`: button debounce and short/long press events
-- `Servo Tester/src/settings_store.*`: EEPROM load/save/validation
-- `Servo Tester/src/app_types.h`: shared app structs/enums
-- `hardware/servo_power_switch/`: hardware switching schematics (`.kicad_sch`, `.drawio`)
+- `src/main.cpp`: entry point (`setup` / `loop`)
+- `src/app_controller.*`: app state machine and high-level control flow
+- `src/display_ui.*`: OLED rendering
+- `src/ina_monitor.*`: INA3221 handling and peak tracking
+- `src/button_input.*`: button debounce and short/long press events
+- `src/settings_store.*`: EEPROM load/save/validation
+- `src/app_types.h`: shared app structs/enums

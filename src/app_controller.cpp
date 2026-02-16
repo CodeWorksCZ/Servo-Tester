@@ -1,0 +1,458 @@
+#include "app_controller.h"
+
+#include <Wire.h>
+
+#include "config.h"
+#include "display_ui.h"
+#include "settings_store.h"
+
+const char *AppController::modeLabel() const
+{
+  if (controlMode_ == CONTROL_POT)
+  {
+    return "POT";
+  }
+
+  if (controlMode_ == CONTROL_CENTER)
+  {
+    return "CEN";
+  }
+
+  return "SWP";
+}
+
+uint8_t AppController::pulseToAngle(const uint16_t pulseUs, const Settings &settings) const
+{
+  if (settings.maxPulseUs <= settings.minPulseUs)
+  {
+    return 0;
+  }
+
+  const long angle = map(pulseUs, settings.minPulseUs, settings.maxPulseUs, 0, 180);
+  if (angle < 0)
+  {
+    return 0;
+  }
+
+  if (angle > 180)
+  {
+    return 180;
+  }
+
+  return static_cast<uint8_t>(angle);
+}
+
+void AppController::drawUi()
+{
+  if (!displayReady_)
+  {
+    return;
+  }
+
+  if (uiMode_ == UI_STATUS)
+  {
+    if (statusScreen_ == SCREEN_DEFAULT)
+    {
+      DisplayUi::drawStatusScreen(
+          currentPulseUs_,
+          pulseToAngle(currentPulseUs_, savedSettings_),
+          savedSettings_.minPulseUs,
+          savedSettings_.maxPulseUs,
+          savedSettings_.reverse,
+          hvMode_,
+          modeLabel(),
+          controlMode_ == CONTROL_SWEEP,
+          sweepCycleCounter_);
+    }
+    else if (statusScreen_ == SCREEN_CURRENT)
+    {
+      DisplayUi::drawCurrentScreen(
+          inaMonitor_.ready(),
+          inaMonitor_.ch1mA(),
+          inaMonitor_.ch2mA(),
+          inaMonitor_.ch3mA(),
+          hvMode_,
+          modeLabel());
+    }
+    else
+    {
+      DisplayUi::drawCurrentPeakScreen(
+          inaMonitor_.ready(),
+          inaMonitor_.peakCh1mA(),
+          inaMonitor_.peakCh2mA(),
+          inaMonitor_.peakCh3mA(),
+          hvMode_,
+          modeLabel());
+    }
+
+    return;
+  }
+
+  DisplayUi::drawSettingsScreen(
+      selectedMenuItem_,
+      uiMode_ == UI_MENU_EDIT,
+      editSettings_.minPulseUs,
+      editSettings_.maxPulseUs,
+      editSettings_.reverse,
+      editSettings_.sweepCycleSec);
+}
+
+void AppController::cycleStatusScreen()
+{
+  statusScreen_ = static_cast<StatusScreen>((statusScreen_ + 1) % SCREEN_COUNT);
+}
+
+void AppController::resetSweepState()
+{
+  sweepPulseUs_ = savedSettings_.minPulseUs;
+  sweepDirection_ = 1;
+  sweepCycleCounter_ = 0;
+  sweepReachedMax_ = false;
+  lastSweepStepMs_ = millis();
+}
+
+void AppController::cycleControlMode(const int8_t direction)
+{
+  int8_t nextMode = static_cast<int8_t>(controlMode_) + direction;
+  if (nextMode < 0)
+  {
+    nextMode = static_cast<int8_t>(CONTROL_COUNT - 1);
+  }
+  else if (nextMode >= static_cast<int8_t>(CONTROL_COUNT))
+  {
+    nextMode = 0;
+  }
+
+  const ControlMode previousMode = controlMode_;
+  controlMode_ = static_cast<ControlMode>(nextMode);
+  if (controlMode_ != previousMode)
+  {
+    sweepCycleCounter_ = 0;
+    sweepReachedMax_ = false;
+  }
+
+  if (controlMode_ == CONTROL_SWEEP)
+  {
+    resetSweepState();
+  }
+}
+
+void AppController::enterSettingsMenu()
+{
+  editSettings_ = savedSettings_;
+  selectedMenuItem_ = MENU_MIN_PULSE;
+  uiMode_ = UI_MENU_NAVIGATION;
+}
+
+void AppController::exitSettingsMenu(const bool save)
+{
+  if (save)
+  {
+    savedSettings_ = editSettings_;
+    SettingsStore::save(savedSettings_);
+
+    if (controlMode_ == CONTROL_SWEEP)
+    {
+      resetSweepState();
+    }
+  }
+
+  uiMode_ = UI_STATUS;
+}
+
+void AppController::adjustCurrentSetting(const int16_t delta)
+{
+  if (selectedMenuItem_ == MENU_MIN_PULSE)
+  {
+    const uint16_t maxAllowed = editSettings_.maxPulseUs - Config::MIN_PULSE_SPAN_US;
+    long candidate = static_cast<long>(editSettings_.minPulseUs) + delta;
+
+    if (candidate < Config::PULSE_MIN_LIMIT)
+    {
+      candidate = Config::PULSE_MIN_LIMIT;
+    }
+
+    if (candidate > maxAllowed)
+    {
+      candidate = maxAllowed;
+    }
+
+    editSettings_.minPulseUs = static_cast<uint16_t>(candidate);
+    return;
+  }
+
+  if (selectedMenuItem_ == MENU_MAX_PULSE)
+  {
+    const uint16_t minAllowed = editSettings_.minPulseUs + Config::MIN_PULSE_SPAN_US;
+    long candidate = static_cast<long>(editSettings_.maxPulseUs) + delta;
+
+    if (candidate > Config::PULSE_MAX_LIMIT)
+    {
+      candidate = Config::PULSE_MAX_LIMIT;
+    }
+
+    if (candidate < minAllowed)
+    {
+      candidate = minAllowed;
+    }
+
+    editSettings_.maxPulseUs = static_cast<uint16_t>(candidate);
+    return;
+  }
+
+  if (selectedMenuItem_ == MENU_SWEEP_CYCLE)
+  {
+    long candidate = static_cast<long>(editSettings_.sweepCycleSec) + (delta > 0 ? 1 : -1);
+
+    if (candidate < Config::SWEEP_CYCLE_MIN_SEC)
+    {
+      candidate = Config::SWEEP_CYCLE_MIN_SEC;
+    }
+
+    if (candidate > Config::SWEEP_CYCLE_MAX_SEC)
+    {
+      candidate = Config::SWEEP_CYCLE_MAX_SEC;
+    }
+
+    editSettings_.sweepCycleSec = static_cast<uint16_t>(candidate);
+  }
+}
+
+uint16_t AppController::computeSweepStepIntervalMs(const Settings &settings) const
+{
+  const uint32_t spanUs = static_cast<uint32_t>(settings.maxPulseUs - settings.minPulseUs);
+  const uint32_t fullCycleUs = spanUs * 2U;
+  const uint32_t stepsPerCycle = (fullCycleUs / Config::SWEEP_STEP_US) > 0U ? (fullCycleUs / Config::SWEEP_STEP_US) : 1U;
+  const uint32_t cycleMs = static_cast<uint32_t>(settings.sweepCycleSec) * 1000U;
+  const uint32_t intervalMs = cycleMs / stepsPerCycle;
+
+  return static_cast<uint16_t>(intervalMs > 0U ? intervalMs : 1U);
+}
+
+void AppController::updateServoOutput(const unsigned long nowMs)
+{
+  if (controlMode_ == CONTROL_POT)
+  {
+    const int potRaw = analogRead(Config::POT_PIN);
+    const int control = savedSettings_.reverse ? (1023 - potRaw) : potRaw;
+    currentPulseUs_ = static_cast<uint16_t>(map(control, 0, 1023, savedSettings_.minPulseUs, savedSettings_.maxPulseUs));
+  }
+  else if (controlMode_ == CONTROL_CENTER)
+  {
+    currentPulseUs_ = static_cast<uint16_t>((savedSettings_.minPulseUs + savedSettings_.maxPulseUs) / 2);
+  }
+  else
+  {
+    if (sweepPulseUs_ < savedSettings_.minPulseUs)
+    {
+      sweepPulseUs_ = savedSettings_.minPulseUs;
+      sweepDirection_ = 1;
+      sweepReachedMax_ = false;
+    }
+    else if (sweepPulseUs_ > savedSettings_.maxPulseUs)
+    {
+      sweepPulseUs_ = savedSettings_.maxPulseUs;
+      sweepDirection_ = -1;
+      sweepReachedMax_ = true;
+    }
+
+    const uint16_t sweepStepIntervalMs = computeSweepStepIntervalMs(savedSettings_);
+    if ((nowMs - lastSweepStepMs_) >= sweepStepIntervalMs)
+    {
+      lastSweepStepMs_ = nowMs;
+
+      const int32_t stepUs = (sweepDirection_ > 0) ? static_cast<int32_t>(Config::SWEEP_STEP_US)
+                                                   : -static_cast<int32_t>(Config::SWEEP_STEP_US);
+      const int32_t nextPulse = static_cast<int32_t>(sweepPulseUs_) + stepUs;
+
+      if (nextPulse >= static_cast<int32_t>(savedSettings_.maxPulseUs))
+      {
+        sweepPulseUs_ = savedSettings_.maxPulseUs;
+        sweepDirection_ = -1;
+        sweepReachedMax_ = true;
+      }
+      else if (nextPulse <= static_cast<int32_t>(savedSettings_.minPulseUs))
+      {
+        sweepPulseUs_ = savedSettings_.minPulseUs;
+        sweepDirection_ = 1;
+        if (sweepReachedMax_ && sweepCycleCounter_ < UINT32_MAX)
+        {
+          ++sweepCycleCounter_;
+        }
+        sweepReachedMax_ = false;
+      }
+      else
+      {
+        sweepPulseUs_ = static_cast<uint16_t>(nextPulse);
+      }
+    }
+
+    currentPulseUs_ = sweepPulseUs_;
+  }
+
+  servoOutput_.writeMicroseconds(currentPulseUs_);
+}
+
+float AppController::readServoRailVoltageV() const
+{
+  const int raw = analogRead(Config::SERVO_VSENSE_PIN);
+  const float adcV = (static_cast<float>(raw) * Config::SERVO_VSENSE_ADC_REF_V) / 1023.0f;
+  const float ratio = (Config::SERVO_VSENSE_R1_OHMS + Config::SERVO_VSENSE_R2_OHMS) / Config::SERVO_VSENSE_R2_OHMS;
+  return adcV * ratio;
+}
+
+void AppController::handleUiInput(const bool upPressed, const bool downPressed, const bool selectShortPress, const bool selectLongPress)
+{
+  switch (uiMode_)
+  {
+  case UI_STATUS:
+    if (selectLongPress)
+    {
+      enterSettingsMenu();
+    }
+    else if (upPressed)
+    {
+      cycleControlMode(1);
+    }
+    else if (downPressed)
+    {
+      cycleControlMode(-1);
+    }
+    else if (selectShortPress)
+    {
+      cycleStatusScreen();
+    }
+    break;
+
+  case UI_MENU_NAVIGATION:
+    if (upPressed)
+    {
+      if (selectedMenuItem_ == 0)
+      {
+        selectedMenuItem_ = static_cast<uint8_t>(MENU_ITEM_COUNT - 1);
+      }
+      else
+      {
+        --selectedMenuItem_;
+      }
+    }
+
+    if (downPressed)
+    {
+      selectedMenuItem_ = static_cast<uint8_t>((selectedMenuItem_ + 1) % MENU_ITEM_COUNT);
+    }
+
+    if (selectShortPress)
+    {
+      if (selectedMenuItem_ == MENU_SAVE_EXIT)
+      {
+        exitSettingsMenu(true);
+      }
+      else if (selectedMenuItem_ == MENU_CANCEL)
+      {
+        exitSettingsMenu(false);
+      }
+      else
+      {
+        uiMode_ = UI_MENU_EDIT;
+      }
+    }
+    break;
+
+  case UI_MENU_EDIT:
+    if (selectedMenuItem_ == MENU_REVERSE)
+    {
+      if (upPressed || downPressed || selectShortPress)
+      {
+        editSettings_.reverse = editSettings_.reverse ? 0 : 1;
+        uiMode_ = UI_MENU_NAVIGATION;
+      }
+    }
+    else
+    {
+      if (upPressed)
+      {
+        adjustCurrentSetting(Config::PULSE_STEP_US);
+      }
+
+      if (downPressed)
+      {
+        adjustCurrentSetting(-Config::PULSE_STEP_US);
+      }
+
+      if (selectShortPress)
+      {
+        uiMode_ = UI_MENU_NAVIGATION;
+      }
+    }
+    break;
+  }
+}
+
+void AppController::begin()
+{
+  savedSettings_ = SettingsStore::load();
+  currentPulseUs_ = savedSettings_.minPulseUs;
+  sweepPulseUs_ = savedSettings_.minPulseUs;
+
+  Wire.begin();
+#if defined(WIRE_HAS_TIMEOUT)
+  Wire.setWireTimeout(25000, true);
+#endif
+
+  displayReady_ = DisplayUi::begin();
+  if (displayReady_)
+  {
+    DisplayUi::drawBootScreen();
+  }
+
+  servoOutput_.attach(Config::SERVO_PIN, Config::PULSE_MIN_LIMIT, Config::PULSE_MAX_LIMIT);
+  pinMode(Config::POT_PIN, INPUT);
+  pinMode(Config::SERVO_VSENSE_PIN, INPUT);
+
+  ButtonInput::init(buttonUp_, Config::BTN_UP_PIN);
+  ButtonInput::init(buttonDown_, Config::BTN_DOWN_PIN);
+  ButtonInput::init(buttonSelect_, Config::BTN_SELECT_PIN);
+
+  if (Config::MODE_SWITCH_PIN != 255)
+  {
+    pinMode(Config::MODE_SWITCH_PIN, Config::MODE_SWITCH_USE_PULLUP ? INPUT_PULLUP : INPUT);
+  }
+
+  inaMonitor_.begin(Wire);
+  delay(600);
+}
+
+void AppController::update()
+{
+  const unsigned long nowMs = millis();
+
+  if (Config::MODE_SWITCH_PIN != 255)
+  {
+    const bool modeReading = Config::MODE_SWITCH_ACTIVE_LOW ? (digitalRead(Config::MODE_SWITCH_PIN) == LOW)
+                                                            : (digitalRead(Config::MODE_SWITCH_PIN) == HIGH);
+    hvMode_ = modeReading;
+  }
+  else
+  {
+    servoRailVoltageV_ = readServoRailVoltageV();
+    hvMode_ = (servoRailVoltageV_ >= Config::SERVO_VSENSE_HV_THRESHOLD_V);
+  }
+
+  const bool upPressed = ButtonInput::updatePressed(buttonUp_, nowMs);
+  const bool downPressed = ButtonInput::updatePressed(buttonDown_, nowMs);
+
+  bool selectShortPress = false;
+  bool selectLongPress = false;
+  ButtonInput::updateSelectEvents(buttonSelect_, nowMs, selectShortPress, selectLongPress);
+
+  updateServoOutput(nowMs);
+  inaMonitor_.update(nowMs);
+  handleUiInput(upPressed, downPressed, selectShortPress, selectLongPress);
+
+  if ((nowMs - lastUiDrawMs_) >= Config::UI_REFRESH_MS || upPressed || downPressed || selectShortPress || selectLongPress)
+  {
+    drawUi();
+    lastUiDrawMs_ = nowMs;
+  }
+}
