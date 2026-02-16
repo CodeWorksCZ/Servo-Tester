@@ -1,0 +1,34 @@
+Arduino Pro Mini (ATmega328P) - Pin Mapping
+Project: Servo Tester
+
+Digital pins
+- D0 (RX): UART RX (USB-Serial programming/debug), not assigned to project I/O.
+- D1 (TX): UART TX (USB-Serial programming/debug), not assigned to project I/O.
+- D2: BTN_UP_PIN (button UP, active low with internal pull-up).
+- D3: BTN_DOWN_PIN (button DOWN, active low with internal pull-up).
+- D4: Free.
+- D5: BTN_SELECT_PIN (button SELECT, short press = next screen, long press = settings).
+- D6: SERVO_PIN (servo signal output, PWM/timer driven by Servo library).
+- D7: Free (mode switch pin disabled in config, MODE_SWITCH_PIN = 255).
+- D8: Free.
+- D9: OLED_MOSI (SSD1306 software SPI, display DIN/D1).
+- D10: OLED_CLK (SSD1306 software SPI, display CLK/D0).
+- D11: OLED_DC (SSD1306 D/C).
+- D12: OLED_CS (SSD1306 chip select).
+- D13: OLED_RESET (SSD1306 reset).
+
+Analog pins
+- A0: POT_PIN (servo control potentiometer input).
+- A1: SERVO_VSENSE_PIN (servo rail voltage sensing through resistor divider).
+- A2: Free.
+- A3: Free.
+- A4: I2C SDA (INA3221 SDA).
+- A5: I2C SCL (INA3221 SCL).
+- A6: Free (analog input only, no digital I/O).
+- A7: Free (analog input only, no digital I/O).
+
+Power / control pins (board-level)
+- RAW: External input to onboard regulator (if used by board wiring).
+- VCC: 5V logic rail.
+- GND: Common ground (must be shared by Arduino, INA3221, display, and servo power return).
+- RST: Reset input.

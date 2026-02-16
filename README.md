@@ -1,37 +1,85 @@
-﻿# Servo-Tester
+# Servo Tester
 
-RC servo tester for Arduino Pro Mini (ATmega328, 16 MHz) with an OLED settings menu.
+RC servo tester for Arduino Pro Mini (ATmega328P, 16 MHz) with OLED UI, settings in EEPROM, and 3-channel current monitoring via INA3221.
 
 ## Features
 
-- Servo control via potentiometer (`A0`)
-- OLED UI (SSD1306, software SPI)
-- Settings menu with options: `Min pulse`, `Max pulse`, `Reverse`, `Save & exit`, `Cancel`
-- Settings stored in EEPROM
+- Servo control modes: `POT`, `CENTER`, `SWEEP`
+- OLED screens: `STATUS`, `CURRENT`, `PEAK`
+- SWEEP cycle counter shown only in SWEEP mode
+- Settings menu with EEPROM persistence
+- INA3221 current measurement on 3 channels
+- Automatic unit display (`mA` / `A`) on current screens
+- Servo rail mode detection (`STD` / `HV`) from ADC voltage sensing on `A1`
 
 ## Controls
 
-- `SELECT` opens the Settings menu from the main screen
-- `UP/DOWN` navigates menu items
-- `SELECT` enters/confirms edit mode
+- `SELECT` short press: switch LCD screen (`STATUS -> CURRENT -> PEAK`)
+- `SELECT` long press: enter settings menu
+- `UP` / `DOWN` in status mode: change control mode (`POT`, `CENTER`, `SWEEP`)
+- `UP` / `DOWN` in menu: navigate items or change value
+- `SELECT` in menu: confirm
 
-## Default Pinout
+## Settings Menu
 
-- Servo: `D6`
-- Potentiometer: `A0`
-- Buttons: `UP` = `D2`, `DOWN` = `D3`, `SELECT` = `D5`
-- OLED SSD1306 (software SPI): `MOSI` = `D9`, `CLK` = `D10`, `DC` = `D11`, `CS` = `D12`, `RESET` = `D13`
+- `Min pulse` (us)
+- `Max pulse` (us)
+- `Reverse`
+- `Sweep cycle` (1-30 s, default 3 s)
+- `Save & exit`
+- `Cancel`
+
+## Pin Mapping (Default)
+
+- `D2`: `BTN_UP_PIN`
+- `D3`: `BTN_DOWN_PIN`
+- `D5`: `BTN_SELECT_PIN`
+- `D6`: `SERVO_PIN`
+- `D9`: OLED `MOSI`
+- `D10`: OLED `CLK`
+- `D11`: OLED `DC`
+- `D12`: OLED `CS`
+- `D13`: OLED `RESET`
+- `A0`: potentiometer
+- `A1`: servo rail voltage sensing (divider)
+- `A4`: I2C `SDA` (INA3221)
+- `A5`: I2C `SCL` (INA3221)
+
+Full mapping is in `Servo Tester/pins.txt`.
 
 ## Configuration
 
-All main configuration is in `Servo Tester/include/config.h`:
+Main configuration is in `Servo Tester/include/config.h`.
 
-- Pin mapping
-- Debounce and UI timing
-- Servo pulse limits/defaults
-- EEPROM address/version
-- Button polarity (`BUTTON_ACTIVE_LOW`) and internal pull-up usage (`BUTTON_USE_INTERNAL_PULLUP`)
+You can adjust:
 
-## PlatformIO
+- pin assignments
+- button debounce and long-press timing
+- servo pulse limits and step size
+- sweep timing and limits
+- INA3221 shunt values and calibration factors
+- ADC divider and HV threshold
 
-The project is configured for PlatformIO in `Servo Tester/platformio.ini` (`env:pro16MHzatmega328`).
+## Build
+
+PlatformIO environment:
+
+- file: `Servo Tester/platformio.ini`
+- env: `pro16MHzatmega328`
+
+Libraries used:
+
+- Adafruit SSD1306
+- Adafruit GFX Library
+- Adafruit INA3221 Library
+- Servo
+
+## Project Layout
+
+- `Servo Tester/src/main.cpp`: app orchestration and state machine
+- `Servo Tester/src/display_ui.*`: OLED rendering
+- `Servo Tester/src/ina_monitor.*`: INA3221 handling and peak tracking
+- `Servo Tester/src/button_input.*`: button debounce and short/long press events
+- `Servo Tester/src/settings_store.*`: EEPROM load/save/validation
+- `Servo Tester/src/app_types.h`: shared app structs/enums
+- `hardware/servo_power_switch/`: hardware switching schematics (`.kicad_sch`, `.drawio`)

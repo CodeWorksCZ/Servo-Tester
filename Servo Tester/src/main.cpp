@@ -1,196 +1,57 @@
 #include <Arduino.h>
-#include <SPI.h>
 #include <Servo.h>
-#include <EEPROM.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
+#include <Wire.h>
+
+#include "app_types.h"
+#include "button_input.h"
 #include "config.h"
+#include "display_ui.h"
+#include "ina_monitor.h"
+#include "settings_store.h"
 
-// Global display instance configured for software SPI pins from config.
-Adafruit_SSD1306 display(
-    Config::SCREEN_WIDTH,
-    Config::SCREEN_HEIGHT,
-    Config::OLED_MOSI,
-    Config::OLED_CLK,
-    Config::OLED_DC,
-    Config::OLED_RESET,
-    Config::OLED_CS);
-
-// Persisted user settings stored in EEPROM.
-struct Settings
-{
-  uint8_t version;
-  uint16_t minPulseUs;
-  uint16_t maxPulseUs;
-  uint8_t reverse;
-};
-
-// Debounced button state container.
-struct Button
-{
-  uint8_t pin;
-  bool stablePressed;
-  bool lastReading;
-  unsigned long lastDebounceMs;
-};
-
-// Top-level UI states.
-enum UiMode : uint8_t
-{
-  UI_STATUS = 0,
-  UI_MENU_NAVIGATION = 1,
-  UI_MENU_EDIT = 2
-};
-
-// Menu entries shown on the Settings screen.
-enum MenuItem : uint8_t
-{
-  MENU_MIN_PULSE = 0,
-  MENU_MAX_PULSE = 1,
-  MENU_REVERSE = 2,
-  MENU_SAVE_EXIT = 3,
-  MENU_CANCEL = 4,
-  MENU_ITEM_COUNT = 5
-};
-
-// Runtime state.
 Servo servoOutput;
-Settings savedSettings;
-Settings editSettings;
+InaMonitor inaMonitor;
 
-Button buttonUp;
-Button buttonDown;
-Button buttonSelect;
+Settings savedSettings{};
+Settings editSettings{};
+
+ButtonState buttonUp{};
+ButtonState buttonDown{};
+ButtonState buttonSelect{};
 
 UiMode uiMode = UI_STATUS;
 uint8_t selectedMenuItem = MENU_MIN_PULSE;
+StatusScreen statusScreen = SCREEN_DEFAULT;
+ControlMode controlMode = CONTROL_POT;
+
 uint16_t currentPulseUs = Config::PULSE_DEFAULT_MIN;
+uint16_t sweepPulseUs = Config::PULSE_DEFAULT_MIN;
+int8_t sweepDirection = 1;
+uint32_t sweepCycleCounter = 0;
+bool sweepReachedMax = false;
+
+unsigned long lastSweepStepMs = 0;
 unsigned long lastUiDrawMs = 0;
+
 bool displayReady = false;
+bool hvMode = false;
+float servoRailVoltageV = 0.0f;
 
-// Factory defaults used when EEPROM data is invalid or missing.
-Settings defaultSettings()
+const char *modeLabel()
 {
-  Settings s{};
-  s.version = Config::SETTINGS_VERSION;
-  s.minPulseUs = Config::PULSE_DEFAULT_MIN;
-  s.maxPulseUs = Config::PULSE_DEFAULT_MAX;
-  s.reverse = 0;
-  return s;
+  if (controlMode == CONTROL_POT)
+  {
+    return "POT";
+  }
+
+  if (controlMode == CONTROL_CENTER)
+  {
+    return "CEN";
+  }
+
+  return "SWP";
 }
 
-// Sanity-check loaded settings before they are used.
-bool isValidSettings(const Settings &s)
-{
-  if (s.version != Config::SETTINGS_VERSION)
-  {
-    return false;
-  }
-
-  if (s.minPulseUs < Config::PULSE_MIN_LIMIT || s.maxPulseUs > Config::PULSE_MAX_LIMIT)
-  {
-    return false;
-  }
-
-  if (s.maxPulseUs <= s.minPulseUs)
-  {
-    return false;
-  }
-
-  if ((s.maxPulseUs - s.minPulseUs) < Config::MIN_PULSE_SPAN_US)
-  {
-    return false;
-  }
-
-  if (s.reverse > 1)
-  {
-    return false;
-  }
-
-  return true;
-}
-
-// Save current settings struct into EEPROM.
-void saveSettings()
-{
-  EEPROM.put(Config::EEPROM_ADDR, savedSettings);
-}
-
-// Load settings from EEPROM, fallback to defaults if needed.
-void loadSettings()
-{
-  EEPROM.get(Config::EEPROM_ADDR, savedSettings);
-  if (!isValidSettings(savedSettings))
-  {
-    savedSettings = defaultSettings();
-    saveSettings();
-  }
-}
-
-// Initialize one button and prime its debounce state.
-void initButton(Button &button, uint8_t pin)
-{
-  button.pin = pin;
-  // Current wiring uses internal pull-up and active-low button logic.
-  pinMode(pin, INPUT_PULLUP);
-
-  const bool pressed = (digitalRead(pin) == LOW);
-  button.stablePressed = pressed;
-  button.lastReading = pressed;
-  button.lastDebounceMs = 0;
-}
-
-// Returns true once on a clean press edge (debounced).
-bool updateButtonPressed(Button &button, const unsigned long nowMs)
-{
-  const bool reading = (digitalRead(button.pin) == LOW);
-
-  if (reading != button.lastReading)
-  {
-    button.lastDebounceMs = nowMs;
-  }
-
-  button.lastReading = reading;
-
-  if ((nowMs - button.lastDebounceMs) > Config::BUTTON_DEBOUNCE_MS && reading != button.stablePressed)
-  {
-    button.stablePressed = reading;
-    if (button.stablePressed)
-    {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-// Compose a visible label for one settings menu item.
-void getMenuLabel(const uint8_t item, char *buffer, const size_t bufferLen)
-{
-  switch (item)
-  {
-  case MENU_MIN_PULSE:
-    snprintf(buffer, bufferLen, "Min pulse: %u", editSettings.minPulseUs);
-    break;
-  case MENU_MAX_PULSE:
-    snprintf(buffer, bufferLen, "Max pulse: %u", editSettings.maxPulseUs);
-    break;
-  case MENU_REVERSE:
-    snprintf(buffer, bufferLen, "Reverse: %s", editSettings.reverse ? "ON" : "OFF");
-    break;
-  case MENU_SAVE_EXIT:
-    snprintf(buffer, bufferLen, "Save & exit");
-    break;
-  case MENU_CANCEL:
-    snprintf(buffer, bufferLen, "Cancel");
-    break;
-  default:
-    snprintf(buffer, bufferLen, "");
-    break;
-  }
-}
-
-// Convert current pulse width to a 0-180 preview angle.
 uint8_t pulseToAngle(const uint16_t pulseUs, const Settings &settings)
 {
   if (settings.maxPulseUs <= settings.minPulseUs)
@@ -212,85 +73,6 @@ uint8_t pulseToAngle(const uint16_t pulseUs, const Settings &settings)
   return static_cast<uint8_t>(angle);
 }
 
-// Draw main status screen with current output values.
-void drawStatusScreen()
-{
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setTextColor(SSD1306_WHITE);
-
-  display.setCursor(0, 0);
-  display.println(F("Servo Tester"));
-
-  display.setCursor(0, 14);
-  display.print(F("Pulse: "));
-  display.print(currentPulseUs);
-  display.println(F(" us"));
-
-  display.setCursor(0, 26);
-  display.print(F("Angle: "));
-  display.print(pulseToAngle(currentPulseUs, savedSettings));
-  display.println(F(" deg"));
-
-  display.setCursor(0, 38);
-  display.print(F("Range: "));
-  display.print(savedSettings.minPulseUs);
-  display.print(F("-"));
-  display.print(savedSettings.maxPulseUs);
-
-  display.setCursor(0, 50);
-  display.print(F("Rev: "));
-  display.print(savedSettings.reverse ? F("ON") : F("OFF"));
-  display.setCursor(68, 50);
-  display.print(F("SEL=Menu"));
-
-  display.display();
-}
-
-// Draw settings menu, including simple scrolling window.
-void drawSettingsScreen()
-{
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setTextColor(SSD1306_WHITE);
-
-  display.setCursor(0, 0);
-  display.print(F("Settings"));
-  if (uiMode == UI_MENU_EDIT)
-  {
-    display.setCursor(86, 0);
-    display.print(F("EDIT"));
-  }
-
-  constexpr uint8_t visibleRows = 4;
-  uint8_t firstVisible = 0;
-
-  if (selectedMenuItem >= visibleRows)
-  {
-    firstVisible = selectedMenuItem - visibleRows + 1;
-  }
-
-  for (uint8_t row = 0; row < visibleRows; ++row)
-  {
-    const uint8_t item = firstVisible + row;
-    if (item >= MENU_ITEM_COUNT)
-    {
-      break;
-    }
-
-    char line[24];
-    getMenuLabel(item, line, sizeof(line));
-
-    const int16_t y = 14 + (row * 12);
-    display.setCursor(0, y);
-    display.print(item == selectedMenuItem ? '>' : ' ');
-    display.print(line);
-  }
-
-  display.display();
-}
-
-// Route drawing to the active screen.
 void drawUi()
 {
   if (!displayReady)
@@ -300,15 +82,92 @@ void drawUi()
 
   if (uiMode == UI_STATUS)
   {
-    drawStatusScreen();
+    if (statusScreen == SCREEN_DEFAULT)
+    {
+      DisplayUi::drawStatusScreen(
+          currentPulseUs,
+          pulseToAngle(currentPulseUs, savedSettings),
+          savedSettings.minPulseUs,
+          savedSettings.maxPulseUs,
+          savedSettings.reverse,
+          hvMode,
+          modeLabel(),
+          controlMode == CONTROL_SWEEP,
+          sweepCycleCounter);
+    }
+    else if (statusScreen == SCREEN_CURRENT)
+    {
+      DisplayUi::drawCurrentScreen(
+          inaMonitor.ready(),
+          inaMonitor.ch1mA(),
+          inaMonitor.ch2mA(),
+          inaMonitor.ch3mA(),
+          hvMode,
+          modeLabel());
+    }
+    else
+    {
+      DisplayUi::drawCurrentPeakScreen(
+          inaMonitor.ready(),
+          inaMonitor.peakCh1mA(),
+          inaMonitor.peakCh2mA(),
+          inaMonitor.peakCh3mA(),
+          hvMode,
+          modeLabel());
+    }
+
+    return;
   }
-  else
+
+  DisplayUi::drawSettingsScreen(
+      selectedMenuItem,
+      uiMode == UI_MENU_EDIT,
+      editSettings.minPulseUs,
+      editSettings.maxPulseUs,
+      editSettings.reverse,
+      editSettings.sweepCycleSec);
+}
+
+void cycleStatusScreen()
+{
+  statusScreen = static_cast<StatusScreen>((statusScreen + 1) % SCREEN_COUNT);
+}
+
+void resetSweepState()
+{
+  sweepPulseUs = savedSettings.minPulseUs;
+  sweepDirection = 1;
+  sweepCycleCounter = 0;
+  sweepReachedMax = false;
+  lastSweepStepMs = millis();
+}
+
+void cycleControlMode(const int8_t direction)
+{
+  int8_t nextMode = static_cast<int8_t>(controlMode) + direction;
+  if (nextMode < 0)
   {
-    drawSettingsScreen();
+    nextMode = static_cast<int8_t>(CONTROL_COUNT - 1);
+  }
+  else if (nextMode >= static_cast<int8_t>(CONTROL_COUNT))
+  {
+    nextMode = 0;
+  }
+
+  const ControlMode previousMode = controlMode;
+  controlMode = static_cast<ControlMode>(nextMode);
+  if (controlMode != previousMode)
+  {
+    sweepCycleCounter = 0;
+    sweepReachedMax = false;
+  }
+
+  if (controlMode == CONTROL_SWEEP)
+  {
+    resetSweepState();
   }
 }
 
-// Enter menu mode and start editing a working copy.
 void enterSettingsMenu()
 {
   editSettings = savedSettings;
@@ -316,69 +175,186 @@ void enterSettingsMenu()
   uiMode = UI_MENU_NAVIGATION;
 }
 
-// Exit menu mode and optionally persist edited settings.
 void exitSettingsMenu(const bool save)
 {
   if (save)
   {
     savedSettings = editSettings;
-    saveSettings();
+    SettingsStore::save(savedSettings);
+
+    if (controlMode == CONTROL_SWEEP)
+    {
+      resetSweepState();
+    }
   }
 
   uiMode = UI_STATUS;
 }
 
-// Adjust currently selected numeric setting while preserving bounds.
 void adjustCurrentSetting(const int16_t delta)
 {
   if (selectedMenuItem == MENU_MIN_PULSE)
   {
     const uint16_t maxAllowed = editSettings.maxPulseUs - Config::MIN_PULSE_SPAN_US;
     long candidate = static_cast<long>(editSettings.minPulseUs) + delta;
+
     if (candidate < Config::PULSE_MIN_LIMIT)
     {
       candidate = Config::PULSE_MIN_LIMIT;
     }
+
     if (candidate > maxAllowed)
     {
       candidate = maxAllowed;
     }
+
     editSettings.minPulseUs = static_cast<uint16_t>(candidate);
+    return;
   }
-  else if (selectedMenuItem == MENU_MAX_PULSE)
+
+  if (selectedMenuItem == MENU_MAX_PULSE)
   {
     const uint16_t minAllowed = editSettings.minPulseUs + Config::MIN_PULSE_SPAN_US;
     long candidate = static_cast<long>(editSettings.maxPulseUs) + delta;
+
     if (candidate > Config::PULSE_MAX_LIMIT)
     {
       candidate = Config::PULSE_MAX_LIMIT;
     }
+
     if (candidate < minAllowed)
     {
       candidate = minAllowed;
     }
+
     editSettings.maxPulseUs = static_cast<uint16_t>(candidate);
+    return;
+  }
+
+  if (selectedMenuItem == MENU_SWEEP_CYCLE)
+  {
+    long candidate = static_cast<long>(editSettings.sweepCycleSec) + (delta > 0 ? 1 : -1);
+
+    if (candidate < Config::SWEEP_CYCLE_MIN_SEC)
+    {
+      candidate = Config::SWEEP_CYCLE_MIN_SEC;
+    }
+
+    if (candidate > Config::SWEEP_CYCLE_MAX_SEC)
+    {
+      candidate = Config::SWEEP_CYCLE_MAX_SEC;
+    }
+
+    editSettings.sweepCycleSec = static_cast<uint16_t>(candidate);
   }
 }
 
-// Map potentiometer input to pulse output and drive servo.
-void updateServoOutput()
+uint16_t computeSweepStepIntervalMs(const Settings &settings)
 {
-  const int potRaw = analogRead(Config::POT_PIN);
-  const int control = savedSettings.reverse ? (1023 - potRaw) : potRaw;
-  currentPulseUs = static_cast<uint16_t>(map(control, 0, 1023, savedSettings.minPulseUs, savedSettings.maxPulseUs));
+  const uint32_t spanUs = static_cast<uint32_t>(settings.maxPulseUs - settings.minPulseUs);
+  const uint32_t fullCycleUs = spanUs * 2U;
+  const uint32_t stepsPerCycle = (fullCycleUs / Config::SWEEP_STEP_US) > 0U ? (fullCycleUs / Config::SWEEP_STEP_US) : 1U;
+  const uint32_t cycleMs = static_cast<uint32_t>(settings.sweepCycleSec) * 1000U;
+  const uint32_t intervalMs = cycleMs / stepsPerCycle;
+
+  return static_cast<uint16_t>(intervalMs > 0U ? intervalMs : 1U);
+}
+
+void updateServoOutput(const unsigned long nowMs)
+{
+  if (controlMode == CONTROL_POT)
+  {
+    const int potRaw = analogRead(Config::POT_PIN);
+    const int control = savedSettings.reverse ? (1023 - potRaw) : potRaw;
+    currentPulseUs = static_cast<uint16_t>(map(control, 0, 1023, savedSettings.minPulseUs, savedSettings.maxPulseUs));
+  }
+  else if (controlMode == CONTROL_CENTER)
+  {
+    currentPulseUs = static_cast<uint16_t>((savedSettings.minPulseUs + savedSettings.maxPulseUs) / 2);
+  }
+  else
+  {
+    if (sweepPulseUs < savedSettings.minPulseUs)
+    {
+      sweepPulseUs = savedSettings.minPulseUs;
+      sweepDirection = 1;
+      sweepReachedMax = false;
+    }
+    else if (sweepPulseUs > savedSettings.maxPulseUs)
+    {
+      sweepPulseUs = savedSettings.maxPulseUs;
+      sweepDirection = -1;
+      sweepReachedMax = true;
+    }
+
+    const uint16_t sweepStepIntervalMs = computeSweepStepIntervalMs(savedSettings);
+    if ((nowMs - lastSweepStepMs) >= sweepStepIntervalMs)
+    {
+      lastSweepStepMs = nowMs;
+
+      const int32_t stepUs = (sweepDirection > 0) ? static_cast<int32_t>(Config::SWEEP_STEP_US)
+                                                  : -static_cast<int32_t>(Config::SWEEP_STEP_US);
+      const int32_t nextPulse = static_cast<int32_t>(sweepPulseUs) + stepUs;
+
+      if (nextPulse >= static_cast<int32_t>(savedSettings.maxPulseUs))
+      {
+        sweepPulseUs = savedSettings.maxPulseUs;
+        sweepDirection = -1;
+        sweepReachedMax = true;
+      }
+      else if (nextPulse <= static_cast<int32_t>(savedSettings.minPulseUs))
+      {
+        sweepPulseUs = savedSettings.minPulseUs;
+        sweepDirection = 1;
+        if (sweepReachedMax)
+        {
+          if (sweepCycleCounter < UINT32_MAX)
+          {
+            ++sweepCycleCounter;
+          }
+        }
+        sweepReachedMax = false;
+      }
+      else
+      {
+        sweepPulseUs = static_cast<uint16_t>(nextPulse);
+      }
+    }
+
+    currentPulseUs = sweepPulseUs;
+  }
+
   servoOutput.writeMicroseconds(currentPulseUs);
 }
 
-// Handle button-driven UI state transitions and value edits.
-void handleUiInput(const bool upPressed, const bool downPressed, const bool selectPressed)
+float readServoRailVoltageV()
+{
+  const int raw = analogRead(Config::SERVO_VSENSE_PIN);
+  const float adcV = (static_cast<float>(raw) * Config::SERVO_VSENSE_ADC_REF_V) / 1023.0f;
+  const float ratio = (Config::SERVO_VSENSE_R1_OHMS + Config::SERVO_VSENSE_R2_OHMS) / Config::SERVO_VSENSE_R2_OHMS;
+  return adcV * ratio;
+}
+
+void handleUiInput(const bool upPressed, const bool downPressed, const bool selectShortPress, const bool selectLongPress)
 {
   switch (uiMode)
   {
   case UI_STATUS:
-    if (selectPressed)
+    if (selectLongPress)
     {
       enterSettingsMenu();
+    }
+    else if (upPressed)
+    {
+      cycleControlMode(1);
+    }
+    else if (downPressed)
+    {
+      cycleControlMode(-1);
+    }
+    else if (selectShortPress)
+    {
+      cycleStatusScreen();
     }
     break;
 
@@ -400,7 +376,7 @@ void handleUiInput(const bool upPressed, const bool downPressed, const bool sele
       selectedMenuItem = static_cast<uint8_t>((selectedMenuItem + 1) % MENU_ITEM_COUNT);
     }
 
-    if (selectPressed)
+    if (selectShortPress)
     {
       if (selectedMenuItem == MENU_SAVE_EXIT)
       {
@@ -420,7 +396,7 @@ void handleUiInput(const bool upPressed, const bool downPressed, const bool sele
   case UI_MENU_EDIT:
     if (selectedMenuItem == MENU_REVERSE)
     {
-      if (upPressed || downPressed || selectPressed)
+      if (upPressed || downPressed || selectShortPress)
       {
         editSettings.reverse = editSettings.reverse ? 0 : 1;
         uiMode = UI_MENU_NAVIGATION;
@@ -432,11 +408,13 @@ void handleUiInput(const bool upPressed, const bool downPressed, const bool sele
       {
         adjustCurrentSetting(Config::PULSE_STEP_US);
       }
+
       if (downPressed)
       {
         adjustCurrentSetting(-Config::PULSE_STEP_US);
       }
-      if (selectPressed)
+
+      if (selectShortPress)
       {
         uiMode = UI_MENU_NAVIGATION;
       }
@@ -447,43 +425,64 @@ void handleUiInput(const bool upPressed, const bool downPressed, const bool sele
 
 void setup()
 {
-  // Initialize persistent configuration and peripherals.
-  loadSettings();
+  savedSettings = SettingsStore::load();
+
+  Wire.begin();
+#if defined(WIRE_HAS_TIMEOUT)
+  Wire.setWireTimeout(25000, true);
+#endif
+
+  displayReady = DisplayUi::begin();
+  if (displayReady)
+  {
+    DisplayUi::drawBootScreen();
+  }
 
   servoOutput.attach(Config::SERVO_PIN, Config::PULSE_MIN_LIMIT, Config::PULSE_MAX_LIMIT);
   pinMode(Config::POT_PIN, INPUT);
+  pinMode(Config::SERVO_VSENSE_PIN, INPUT);
 
-  initButton(buttonUp, Config::BTN_UP_PIN);
-  initButton(buttonDown, Config::BTN_DOWN_PIN);
-  initButton(buttonSelect, Config::BTN_SELECT_PIN);
+  ButtonInput::init(buttonUp, Config::BTN_UP_PIN);
+  ButtonInput::init(buttonDown, Config::BTN_DOWN_PIN);
+  ButtonInput::init(buttonSelect, Config::BTN_SELECT_PIN);
 
-  displayReady = display.begin(SSD1306_SWITCHCAPVCC);
-  if (displayReady)
+  if (Config::MODE_SWITCH_PIN != 255)
   {
-    display.clearDisplay();
-    display.setTextColor(SSD1306_WHITE);
-    display.setTextSize(1);
-    display.setCursor(0, 0);
-    display.println(F("Servo Tester"));
-    display.setCursor(0, 14);
-    display.println(F("Starting..."));
-    display.display();
-    delay(600);
+    pinMode(Config::MODE_SWITCH_PIN, Config::MODE_SWITCH_USE_PULLUP ? INPUT_PULLUP : INPUT);
   }
+
+  inaMonitor.begin(Wire);
+  delay(600);
 }
 
 void loop()
 {
-  // Read button events, update output, then refresh UI if needed.
   const unsigned long nowMs = millis();
-  const bool upPressed = updateButtonPressed(buttonUp, nowMs);
-  const bool downPressed = updateButtonPressed(buttonDown, nowMs);
-  const bool selectPressed = updateButtonPressed(buttonSelect, nowMs);
 
-  updateServoOutput();
-  handleUiInput(upPressed, downPressed, selectPressed);
+  if (Config::MODE_SWITCH_PIN != 255)
+  {
+    const bool modeReading = Config::MODE_SWITCH_ACTIVE_LOW ? (digitalRead(Config::MODE_SWITCH_PIN) == LOW)
+                                                            : (digitalRead(Config::MODE_SWITCH_PIN) == HIGH);
+    hvMode = modeReading;
+  }
+  else
+  {
+    servoRailVoltageV = readServoRailVoltageV();
+    hvMode = (servoRailVoltageV >= Config::SERVO_VSENSE_HV_THRESHOLD_V);
+  }
 
-  if ((nowMs - lastUiDrawMs) >= Config::UI_REFRESH_MS || upPressed || downPressed || selectPressed)
+  const bool upPressed = ButtonInput::updatePressed(buttonUp, nowMs);
+  const bool downPressed = ButtonInput::updatePressed(buttonDown, nowMs);
+
+  bool selectShortPress = false;
+  bool selectLongPress = false;
+  ButtonInput::updateSelectEvents(buttonSelect, nowMs, selectShortPress, selectLongPress);
+
+  updateServoOutput(nowMs);
+  inaMonitor.update(nowMs);
+  handleUiInput(upPressed, downPressed, selectShortPress, selectLongPress);
+
+  if ((nowMs - lastUiDrawMs) >= Config::UI_REFRESH_MS || upPressed || downPressed || selectShortPress || selectLongPress)
   {
     drawUi();
     lastUiDrawMs = nowMs;
