@@ -438,6 +438,21 @@ float AppController::readServoRailVoltageV() const
   return adcV * ratio;
 }
 
+void AppController::updateAlertLed() const
+{
+  if (Config::ALERT_LED_PIN == 255)
+  {
+    return;
+  }
+
+  const bool alertActive = inaMonitor_.ready() &&
+                           (inaMonitor_.warnCh1() || inaMonitor_.warnCh2() || inaMonitor_.warnCh3() ||
+                            inaMonitor_.critCh1() || inaMonitor_.critCh2() || inaMonitor_.critCh3());
+
+  const bool pinLevel = Config::ALERT_LED_ACTIVE_HIGH ? alertActive : !alertActive;
+  digitalWrite(Config::ALERT_LED_PIN, pinLevel ? HIGH : LOW);
+}
+
 void AppController::handleUiInput(const bool upPressed, const bool downPressed, const bool selectShortPress, const bool selectLongPress)
 {
   // Input behavior depends on current UI mode.
@@ -555,6 +570,12 @@ void AppController::begin()
   ButtonInput::init(buttonUp_, Config::BTN_UP_PIN);
   ButtonInput::init(buttonDown_, Config::BTN_DOWN_PIN);
   ButtonInput::init(buttonSelect_, Config::BTN_SELECT_PIN);
+  if (Config::ALERT_LED_PIN != 255)
+  {
+    pinMode(Config::ALERT_LED_PIN, OUTPUT);
+    const bool idleLevel = Config::ALERT_LED_ACTIVE_HIGH ? false : true;
+    digitalWrite(Config::ALERT_LED_PIN, idleLevel ? HIGH : LOW);
+  }
 
   if (Config::MODE_SWITCH_PIN != 255)
   {
@@ -594,6 +615,7 @@ void AppController::update()
 
   updateServoOutput(nowMs);
   inaMonitor_.update(nowMs);
+  updateAlertLed();
   handleUiInput(upPressed, downPressed, selectShortPress, selectLongPress);
 
   if ((nowMs - lastUiDrawMs_) >= Config::UI_REFRESH_MS || upPressed || downPressed || selectShortPress || selectLongPress)

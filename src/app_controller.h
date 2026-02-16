@@ -33,6 +33,7 @@ private:
   uint16_t computeSweepStepIntervalMs(const Settings &settings) const;
   void updateServoOutput(unsigned long nowMs);
   float readServoRailVoltageV() const;
+  void updateAlertLed() const;
   void handleUiInput(bool upPressed, bool downPressed, bool selectShortPress, bool selectLongPress);
 
   // Hardware/service modules.

@@ -6,7 +6,7 @@ Digital pins
 - D1 (TX): UART TX (USB-Serial programming/debug), not assigned to project I/O.
 - D2: BTN_UP_PIN (button UP, active low with internal pull-up).
 - D3: BTN_DOWN_PIN (button DOWN, active low with internal pull-up).
-- D4: Free.
+- D4: ALERT_LED_PIN (optional warning/critical LED, active level configurable in config).
 - D5: BTN_SELECT_PIN (button SELECT, short press = next screen, long press = settings).
 - D6: SERVO_PIN (servo signal output, PWM/timer driven by Servo library).
 - D7: Free (mode switch pin disabled in config, MODE_SWITCH_PIN = 255).

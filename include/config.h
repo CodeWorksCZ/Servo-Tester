@@ -29,6 +29,9 @@ constexpr float SERVO_VSENSE_HV_THRESHOLD_V = 7.2f; // Above this, UI reports HV
 constexpr uint8_t BTN_UP_PIN = 2;
 constexpr uint8_t BTN_DOWN_PIN = 3;
 constexpr uint8_t BTN_SELECT_PIN = 5;
+// Optional alert LED output. Set to 255 to disable.
+constexpr uint8_t ALERT_LED_PIN = 4;
+constexpr bool ALERT_LED_ACTIVE_HIGH = true;
 // External STD/HV mode switch input (to GND or VCC).
 // Set MODE_SWITCH_PIN to 255 to disable and use ADC voltage detection.
 constexpr uint8_t MODE_SWITCH_PIN = 255;
