@@ -6,6 +6,7 @@
 #include <Adafruit_SSD1306.h>
 #include "config.h"
 
+// Global display instance configured for software SPI pins from config.
 Adafruit_SSD1306 display(
     Config::SCREEN_WIDTH,
     Config::SCREEN_HEIGHT,
@@ -15,6 +16,7 @@ Adafruit_SSD1306 display(
     Config::OLED_RESET,
     Config::OLED_CS);
 
+// Persisted user settings stored in EEPROM.
 struct Settings
 {
   uint8_t version;
@@ -23,6 +25,7 @@ struct Settings
   uint8_t reverse;
 };
 
+// Debounced button state container.
 struct Button
 {
   uint8_t pin;
@@ -31,6 +34,7 @@ struct Button
   unsigned long lastDebounceMs;
 };
 
+// Top-level UI states.
 enum UiMode : uint8_t
 {
   UI_STATUS = 0,
@@ -38,6 +42,7 @@ enum UiMode : uint8_t
   UI_MENU_EDIT = 2
 };
 
+// Menu entries shown on the Settings screen.
 enum MenuItem : uint8_t
 {
   MENU_MIN_PULSE = 0,
@@ -48,6 +53,7 @@ enum MenuItem : uint8_t
   MENU_ITEM_COUNT = 5
 };
 
+// Runtime state.
 Servo servoOutput;
 Settings savedSettings;
 Settings editSettings;
@@ -62,6 +68,7 @@ uint16_t currentPulseUs = Config::PULSE_DEFAULT_MIN;
 unsigned long lastUiDrawMs = 0;
 bool displayReady = false;
 
+// Factory defaults used when EEPROM data is invalid or missing.
 Settings defaultSettings()
 {
   Settings s{};
@@ -72,6 +79,7 @@ Settings defaultSettings()
   return s;
 }
 
+// Sanity-check loaded settings before they are used.
 bool isValidSettings(const Settings &s)
 {
   if (s.version != Config::SETTINGS_VERSION)
@@ -102,11 +110,13 @@ bool isValidSettings(const Settings &s)
   return true;
 }
 
+// Save current settings struct into EEPROM.
 void saveSettings()
 {
   EEPROM.put(Config::EEPROM_ADDR, savedSettings);
 }
 
+// Load settings from EEPROM, fallback to defaults if needed.
 void loadSettings()
 {
   EEPROM.get(Config::EEPROM_ADDR, savedSettings);
@@ -117,20 +127,23 @@ void loadSettings()
   }
 }
 
+// Initialize one button and prime its debounce state.
 void initButton(Button &button, uint8_t pin)
 {
   button.pin = pin;
-  pinMode(pin, Config::BUTTON_USE_INTERNAL_PULLUP ? INPUT_PULLUP : INPUT);
+  // Current wiring uses internal pull-up and active-low button logic.
+  pinMode(pin, INPUT_PULLUP);
 
-  const bool pressed = Config::BUTTON_ACTIVE_LOW ? (digitalRead(pin) == LOW) : (digitalRead(pin) == HIGH);
+  const bool pressed = (digitalRead(pin) == LOW);
   button.stablePressed = pressed;
   button.lastReading = pressed;
   button.lastDebounceMs = 0;
 }
 
+// Returns true once on a clean press edge (debounced).
 bool updateButtonPressed(Button &button, const unsigned long nowMs)
 {
-  const bool reading = Config::BUTTON_ACTIVE_LOW ? (digitalRead(button.pin) == LOW) : (digitalRead(button.pin) == HIGH);
+  const bool reading = (digitalRead(button.pin) == LOW);
 
   if (reading != button.lastReading)
   {
@@ -151,6 +164,7 @@ bool updateButtonPressed(Button &button, const unsigned long nowMs)
   return false;
 }
 
+// Compose a visible label for one settings menu item.
 void getMenuLabel(const uint8_t item, char *buffer, const size_t bufferLen)
 {
   switch (item)
@@ -176,6 +190,7 @@ void getMenuLabel(const uint8_t item, char *buffer, const size_t bufferLen)
   }
 }
 
+// Convert current pulse width to a 0-180 preview angle.
 uint8_t pulseToAngle(const uint16_t pulseUs, const Settings &settings)
 {
   if (settings.maxPulseUs <= settings.minPulseUs)
@@ -197,6 +212,7 @@ uint8_t pulseToAngle(const uint16_t pulseUs, const Settings &settings)
   return static_cast<uint8_t>(angle);
 }
 
+// Draw main status screen with current output values.
 void drawStatusScreen()
 {
   display.clearDisplay();
@@ -231,6 +247,7 @@ void drawStatusScreen()
   display.display();
 }
 
+// Draw settings menu, including simple scrolling window.
 void drawSettingsScreen()
 {
   display.clearDisplay();
@@ -273,6 +290,7 @@ void drawSettingsScreen()
   display.display();
 }
 
+// Route drawing to the active screen.
 void drawUi()
 {
   if (!displayReady)
@@ -290,6 +308,7 @@ void drawUi()
   }
 }
 
+// Enter menu mode and start editing a working copy.
 void enterSettingsMenu()
 {
   editSettings = savedSettings;
@@ -297,6 +316,7 @@ void enterSettingsMenu()
   uiMode = UI_MENU_NAVIGATION;
 }
 
+// Exit menu mode and optionally persist edited settings.
 void exitSettingsMenu(const bool save)
 {
   if (save)
@@ -308,6 +328,7 @@ void exitSettingsMenu(const bool save)
   uiMode = UI_STATUS;
 }
 
+// Adjust currently selected numeric setting while preserving bounds.
 void adjustCurrentSetting(const int16_t delta)
 {
   if (selectedMenuItem == MENU_MIN_PULSE)
@@ -340,6 +361,7 @@ void adjustCurrentSetting(const int16_t delta)
   }
 }
 
+// Map potentiometer input to pulse output and drive servo.
 void updateServoOutput()
 {
   const int potRaw = analogRead(Config::POT_PIN);
@@ -348,6 +370,7 @@ void updateServoOutput()
   servoOutput.writeMicroseconds(currentPulseUs);
 }
 
+// Handle button-driven UI state transitions and value edits.
 void handleUiInput(const bool upPressed, const bool downPressed, const bool selectPressed)
 {
   switch (uiMode)
@@ -424,6 +447,7 @@ void handleUiInput(const bool upPressed, const bool downPressed, const bool sele
 
 void setup()
 {
+  // Initialize persistent configuration and peripherals.
   loadSettings();
 
   servoOutput.attach(Config::SERVO_PIN, Config::PULSE_MIN_LIMIT, Config::PULSE_MAX_LIMIT);
@@ -450,6 +474,7 @@ void setup()
 
 void loop()
 {
+  // Read button events, update output, then refresh UI if needed.
   const unsigned long nowMs = millis();
   const bool upPressed = updateButtonPressed(buttonUp, nowMs);
   const bool downPressed = updateButtonPressed(buttonDown, nowMs);
