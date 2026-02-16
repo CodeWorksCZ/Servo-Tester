@@ -18,6 +18,35 @@ Adafruit_SSD1306 display(
     Config::OLED_RESET,
     Config::OLED_CS);
 
+constexpr uint8_t GAUGE_POINT_COUNT = 9;
+constexpr int16_t GAUGE_PIVOT_X = 64;
+constexpr int16_t GAUGE_PIVOT_Y = 58;
+const int16_t GAUGE_ARC_X[GAUGE_POINT_COUNT] = {22, 30, 40, 52, 64, 76, 88, 98, 106};
+const int16_t GAUGE_ARC_Y[GAUGE_POINT_COUNT] = {48, 38, 31, 26, 24, 26, 31, 38, 48};
+
+void gaugeNeedleEndpoint(uint8_t valuePercent, int16_t &xOut, int16_t &yOut)
+{
+  const uint8_t clamped = (valuePercent > 100) ? 100 : valuePercent;
+  const uint16_t scaled = static_cast<uint16_t>(clamped) * static_cast<uint16_t>((GAUGE_POINT_COUNT - 1) * 16U) / 100U;
+  const uint8_t segment = scaled / 16U;
+  const uint8_t frac = scaled % 16U;
+
+  if (segment >= (GAUGE_POINT_COUNT - 1))
+  {
+    xOut = GAUGE_ARC_X[GAUGE_POINT_COUNT - 1];
+    yOut = GAUGE_ARC_Y[GAUGE_POINT_COUNT - 1];
+    return;
+  }
+
+  const int16_t x0 = GAUGE_ARC_X[segment];
+  const int16_t y0 = GAUGE_ARC_Y[segment];
+  const int16_t x1 = GAUGE_ARC_X[segment + 1];
+  const int16_t y1 = GAUGE_ARC_Y[segment + 1];
+
+  xOut = x0 + ((x1 - x0) * frac) / 16;
+  yOut = y0 + ((y1 - y0) * frac) / 16;
+}
+
 void getMenuLabel(uint8_t item, char *buffer, size_t bufferLen, uint16_t minPulseUs, uint16_t maxPulseUs, bool reverse, uint16_t sweepCycleSec)
 {
   // Build one menu line based on current item index and live values.
@@ -59,6 +88,22 @@ void printCurrentAutoUnit(float currentmA)
   {
     display.print(currentmA, 1);
     display.print(F(" mA"));
+  }
+}
+
+void printAlertToken(bool warn, bool crit)
+{
+  if (crit)
+  {
+    display.print(F("CR"));
+  }
+  else if (warn)
+  {
+    display.print(F("WR"));
+  }
+  else
+  {
+    display.print(F("--"));
   }
 }
 
@@ -150,7 +195,47 @@ void drawStatusScreen(
   display.display();
 }
 
-void drawCurrentScreen(bool sensorReady, float currentCh1mA, float currentCh2mA, float currentCh3mA, bool hvMode, const char *modeLabel)
+void drawGaugeScreen(uint8_t valuePercent, bool hvMode, const char *modeLabel)
+{
+  display.clearDisplay();
+  drawHeader(F("GAUGE"), hvMode, modeLabel);
+
+  for (uint8_t i = 0; i < (GAUGE_POINT_COUNT - 1); ++i)
+  {
+    display.drawLine(GAUGE_ARC_X[i], GAUGE_ARC_Y[i], GAUGE_ARC_X[i + 1], GAUGE_ARC_Y[i + 1], SSD1306_WHITE);
+  }
+
+  display.setCursor(6, 49);
+  display.print(F("0"));
+  display.setCursor(108, 49);
+  display.print(F("100"));
+
+  int16_t needleX = GAUGE_ARC_X[0];
+  int16_t needleY = GAUGE_ARC_Y[0];
+  gaugeNeedleEndpoint(valuePercent, needleX, needleY);
+  display.drawLine(GAUGE_PIVOT_X, GAUGE_PIVOT_Y, needleX, needleY, SSD1306_WHITE);
+  display.fillCircle(GAUGE_PIVOT_X, GAUGE_PIVOT_Y, 2, SSD1306_WHITE);
+
+  display.setCursor(54, 49);
+  display.print(valuePercent);
+  display.print(F("%"));
+
+  display.display();
+}
+
+void drawCurrentScreen(
+    bool sensorReady,
+    float currentCh1mA,
+    float currentCh2mA,
+    float currentCh3mA,
+    bool warnCh1,
+    bool warnCh2,
+    bool warnCh3,
+    bool critCh1,
+    bool critCh2,
+    bool critCh3,
+    bool hvMode,
+    const char *modeLabel)
 {
   display.clearDisplay();
   drawHeader(F("CURRENT"), hvMode, modeLabel);
@@ -169,14 +254,78 @@ void drawCurrentScreen(bool sensorReady, float currentCh1mA, float currentCh2mA,
   display.setCursor(0, 22);
   display.print(F("CH1: "));
   printCurrentAutoUnit(currentCh1mA);
+  display.setCursor(106, 22);
+  printAlertToken(warnCh1, critCh1);
 
   display.setCursor(0, 34);
   display.print(F("CH2: "));
   printCurrentAutoUnit(currentCh2mA);
+  display.setCursor(106, 34);
+  printAlertToken(warnCh2, critCh2);
 
   display.setCursor(0, 46);
   display.print(F("CH3: "));
   printCurrentAutoUnit(currentCh3mA);
+  display.setCursor(106, 46);
+  printAlertToken(warnCh3, critCh3);
+
+  display.setCursor(0, 56);
+  display.print(F("S:Next H:Menu"));
+
+  display.display();
+}
+
+void drawVoltageScreen(
+    bool sensorReady,
+    float busCh1V,
+    float busCh2V,
+    float busCh3V,
+    float droopCh1V,
+    float droopCh2V,
+    float droopCh3V,
+    bool warnCh1,
+    bool warnCh2,
+    bool warnCh3,
+    bool critCh1,
+    bool critCh2,
+    bool critCh3,
+    bool hvMode,
+    const char *modeLabel)
+{
+  display.clearDisplay();
+  drawHeader(F("VBUS"), hvMode, modeLabel);
+
+  if (!sensorReady)
+  {
+    display.setCursor(0, 26);
+    display.print(F("INA3221 not found"));
+    display.display();
+    return;
+  }
+
+  display.setCursor(0, 22);
+  display.print(F("1:"));
+  display.print(busCh1V, 2);
+  display.print(F("V d"));
+  display.print(droopCh1V, 2);
+  display.setCursor(106, 22);
+  printAlertToken(warnCh1, critCh1);
+
+  display.setCursor(0, 34);
+  display.print(F("2:"));
+  display.print(busCh2V, 2);
+  display.print(F("V d"));
+  display.print(droopCh2V, 2);
+  display.setCursor(106, 34);
+  printAlertToken(warnCh2, critCh2);
+
+  display.setCursor(0, 46);
+  display.print(F("3:"));
+  display.print(busCh3V, 2);
+  display.print(F("V d"));
+  display.print(droopCh3V, 2);
+  display.setCursor(106, 46);
+  printAlertToken(warnCh3, critCh3);
 
   display.setCursor(0, 56);
   display.print(F("S:Next H:Menu"));

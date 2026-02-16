@@ -4,3 +4,8 @@
 .vscode/launch.json
 .vscode/ipch
 Servo-Tester.code-workspace
+
+# KiCad autosave/lock artifacts
+**/#auto_saved_files#
+**/_autosave-*.kicad_sch
+**/_autosave-*.kicad_pcb

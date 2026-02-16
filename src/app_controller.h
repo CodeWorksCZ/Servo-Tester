@@ -21,6 +21,8 @@ private:
   // UI helpers and state-machine transitions.
   const char *modeLabel() const;
   uint8_t pulseToAngle(uint16_t pulseUs, const Settings &settings) const;
+  uint8_t pulseToPercent(uint16_t pulseUs, const Settings &settings) const;
+  uint16_t stabilizeDisplayPulseUs(uint16_t rawPulseUs, const Settings &settings);
   void drawUi();
   void cycleStatusScreen();
   void resetSweepState();
@@ -67,6 +69,8 @@ private:
   bool displayReady_ = false;
   bool hvMode_ = false;
   float servoRailVoltageV_ = 0.0f;
+  uint16_t displayPulseUs_ = 0;
+  bool displayPulseInitialized_ = false;
 };
 
 #endif

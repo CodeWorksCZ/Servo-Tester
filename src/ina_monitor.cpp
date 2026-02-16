@@ -20,6 +20,13 @@ void InaMonitor::begin(TwoWire &wire)
     g_inaDevice.setShuntResistance(0, Config::INA3221_SHUNT_OHMS_CH1);
     g_inaDevice.setShuntResistance(1, Config::INA3221_SHUNT_OHMS_CH2);
     g_inaDevice.setShuntResistance(2, Config::INA3221_SHUNT_OHMS_CH3);
+    // Configure hardware warning/critical thresholds.
+    g_inaDevice.setWarningAlertThreshold(0, Config::INA3221_WARN_MA_CH1 / 1000.0f);
+    g_inaDevice.setWarningAlertThreshold(1, Config::INA3221_WARN_MA_CH2 / 1000.0f);
+    g_inaDevice.setWarningAlertThreshold(2, Config::INA3221_WARN_MA_CH3 / 1000.0f);
+    g_inaDevice.setCriticalAlertThreshold(0, Config::INA3221_CRIT_MA_CH1 / 1000.0f);
+    g_inaDevice.setCriticalAlertThreshold(1, Config::INA3221_CRIT_MA_CH2 / 1000.0f);
+    g_inaDevice.setCriticalAlertThreshold(2, Config::INA3221_CRIT_MA_CH3 / 1000.0f);
   }
 }
 
@@ -42,6 +49,23 @@ void InaMonitor::update(const unsigned long nowMs)
   ch1mA_ = g_inaDevice.getCurrentAmps(0) * 1000.0f * Config::INA3221_CAL_FACTOR_CH1;
   ch2mA_ = g_inaDevice.getCurrentAmps(1) * 1000.0f * Config::INA3221_CAL_FACTOR_CH2;
   ch3mA_ = g_inaDevice.getCurrentAmps(2) * 1000.0f * Config::INA3221_CAL_FACTOR_CH3;
+  busCh1V_ = g_inaDevice.getBusVoltage(0);
+  busCh2V_ = g_inaDevice.getBusVoltage(1);
+  busCh3V_ = g_inaDevice.getBusVoltage(2);
+
+  // Track best (highest) observed bus voltage as a simple no-load reference.
+  if (busCh1V_ > busRefCh1V_)
+  {
+    busRefCh1V_ = busCh1V_;
+  }
+  if (busCh2V_ > busRefCh2V_)
+  {
+    busRefCh2V_ = busCh2V_;
+  }
+  if (busCh3V_ > busRefCh3V_)
+  {
+    busRefCh3V_ = busCh3V_;
+  }
 
   // Peak-hold logic used by the PEAK LCD screen.
   if (ch1mA_ > peakCh1mA_)
@@ -56,6 +80,14 @@ void InaMonitor::update(const unsigned long nowMs)
   {
     peakCh3mA_ = ch3mA_;
   }
+
+  flags_ = g_inaDevice.getFlags();
+  warnCh1_ = (flags_ & INA3221_WARN_CH1) != 0;
+  warnCh2_ = (flags_ & INA3221_WARN_CH2) != 0;
+  warnCh3_ = (flags_ & INA3221_WARN_CH3) != 0;
+  critCh1_ = (flags_ & INA3221_CRITICAL_CH1) != 0;
+  critCh2_ = (flags_ & INA3221_CRITICAL_CH2) != 0;
+  critCh3_ = (flags_ & INA3221_CRITICAL_CH3) != 0;
 }
 
 bool InaMonitor::ready() const
@@ -76,6 +108,74 @@ float InaMonitor::ch2mA() const
 float InaMonitor::ch3mA() const
 {
   return ch3mA_;
+}
+
+float InaMonitor::busCh1V() const
+{
+  return busCh1V_;
+}
+
+float InaMonitor::busCh2V() const
+{
+  return busCh2V_;
+}
+
+float InaMonitor::busCh3V() const
+{
+  return busCh3V_;
+}
+
+float InaMonitor::droopCh1V() const
+{
+  const float droop = busRefCh1V_ - busCh1V_;
+  return (droop > 0.0f) ? droop : 0.0f;
+}
+
+float InaMonitor::droopCh2V() const
+{
+  const float droop = busRefCh2V_ - busCh2V_;
+  return (droop > 0.0f) ? droop : 0.0f;
+}
+
+float InaMonitor::droopCh3V() const
+{
+  const float droop = busRefCh3V_ - busCh3V_;
+  return (droop > 0.0f) ? droop : 0.0f;
+}
+
+uint16_t InaMonitor::flags() const
+{
+  return flags_;
+}
+
+bool InaMonitor::warnCh1() const
+{
+  return warnCh1_;
+}
+
+bool InaMonitor::warnCh2() const
+{
+  return warnCh2_;
+}
+
+bool InaMonitor::warnCh3() const
+{
+  return warnCh3_;
+}
+
+bool InaMonitor::critCh1() const
+{
+  return critCh1_;
+}
+
+bool InaMonitor::critCh2() const
+{
+  return critCh2_;
+}
+
+bool InaMonitor::critCh3() const
+{
+  return critCh3_;
 }
 
 float InaMonitor::peakCh1mA() const

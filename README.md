@@ -8,16 +8,18 @@ RC servo tester for Arduino Pro Mini (ATmega328P, 16 MHz) with OLED UI, settings
 ## Features
 
 - Servo control modes: `POT`, `CENTER`, `SWEEP`
-- OLED screens: `STATUS`, `CURRENT`, `PEAK`
+- OLED screens: `STATUS`, `GAUGE`, `CURRENT`, `VBUS`, `PEAK`
 - SWEEP cycle counter shown only in SWEEP mode
 - Settings menu with EEPROM persistence
 - INA3221 current measurement on 3 channels
+- INA3221 bus voltage and droop (`dV`) view per channel
+- INA3221 per-channel warning/critical current alerts (`WR`/`CR`)
 - Automatic unit display (`mA` / `A`) on current screens
 - Servo rail mode detection (`STD` / `HV`) from ADC voltage sensing on `A1`
 
 ## Controls
 
-- `SELECT` short press: switch LCD screen (`STATUS -> CURRENT -> PEAK`)
+- `SELECT` short press: switch LCD screen (`STATUS -> GAUGE -> CURRENT -> VBUS -> PEAK`)
 - `SELECT` long press: enter settings menu
 - `UP` / `DOWN` in status mode: change control mode (`POT`, `CENTER`, `SWEEP`)
 - `UP` / `DOWN` in menu: navigate items or change value

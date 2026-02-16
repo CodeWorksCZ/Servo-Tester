@@ -48,9 +48,11 @@ enum MenuItem : uint8_t
 enum StatusScreen : uint8_t
 {
   SCREEN_DEFAULT = 0,
-  SCREEN_CURRENT = 1,
-  SCREEN_CURRENT_PEAK = 2,
-  SCREEN_COUNT = 3
+  SCREEN_GAUGE = 1,
+  SCREEN_CURRENT = 2,
+  SCREEN_VBUS = 3,
+  SCREEN_CURRENT_PEAK = 4,
+  SCREEN_COUNT = 5
 };
 
 // Servo output control strategies.

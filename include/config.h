@@ -39,6 +39,8 @@ constexpr bool MODE_SWITCH_USE_PULLUP = true;
 constexpr uint16_t UI_REFRESH_MS = 80;       // OLED redraw period.
 constexpr uint16_t BUTTON_DEBOUNCE_MS = 35;  // Debounce filter time.
 constexpr uint16_t BUTTON_LONG_PRESS_MS = 700;
+constexpr uint8_t GAUGE_DEADBAND_PERCENT = 1; // Ignore tiny +/- display jitter (% of span).
+constexpr uint8_t GAUGE_MAX_STEP_PERCENT = 4; // Max display step per redraw (% of span).
 // true: pressed = LOW (button to GND), false: pressed = HIGH
 constexpr bool BUTTON_ACTIVE_LOW = true;
 // true: enable internal pull-up resistors on button pins
@@ -54,6 +56,13 @@ constexpr float INA3221_CAL_FACTOR_CH1 = 1.0f;
 constexpr float INA3221_CAL_FACTOR_CH2 = 1.0f;
 constexpr float INA3221_CAL_FACTOR_CH3 = 1.0f;
 constexpr uint16_t INA3221_REFRESH_MS = 200; // Sensor polling interval.
+// Alert thresholds in milliamps (shown as WR/CR on LCD).
+constexpr float INA3221_WARN_MA_CH1 = 1500.0f;
+constexpr float INA3221_WARN_MA_CH2 = 1500.0f;
+constexpr float INA3221_WARN_MA_CH3 = 1500.0f;
+constexpr float INA3221_CRIT_MA_CH1 = 2500.0f;
+constexpr float INA3221_CRIT_MA_CH2 = 2500.0f;
+constexpr float INA3221_CRIT_MA_CH3 = 2500.0f;
 
 // Servo pulse limits and edit behavior
 constexpr uint16_t PULSE_MIN_LIMIT = 500;
