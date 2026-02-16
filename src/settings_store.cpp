@@ -8,6 +8,7 @@ namespace SettingsStore
 {
 Settings makeDefault()
 {
+  // Keep defaults centralized in config.h.
   Settings settings{};
   settings.version = Config::SETTINGS_VERSION;
   settings.minPulseUs = Config::PULSE_DEFAULT_MIN;
@@ -19,6 +20,7 @@ Settings makeDefault()
 
 bool isValid(const Settings &settings)
 {
+  // Reject old EEPROM layout versions.
   if (settings.version != Config::SETTINGS_VERSION)
   {
     return false;
@@ -55,10 +57,12 @@ bool isValid(const Settings &settings)
 Settings load()
 {
   Settings settings{};
+  // Raw binary read of Settings struct from EEPROM.
   EEPROM.get(Config::EEPROM_ADDR, settings);
 
   if (!isValid(settings))
   {
+    // Auto-recover from corrupted/old EEPROM content.
     settings = makeDefault();
     save(settings);
   }
@@ -68,6 +72,7 @@ Settings load()
 
 void save(const Settings &settings)
 {
+  // EEPROM.put writes only changed bytes on AVR.
   EEPROM.put(Config::EEPROM_ADDR, settings);
 }
 } // namespace SettingsStore

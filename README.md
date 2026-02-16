@@ -1,5 +1,8 @@
 # Servo Tester
 
+> **Work In Progress (WIP):** This project is under active development.  
+> Features, wiring, and behavior may change between commits.
+
 RC servo tester for Arduino Pro Mini (ATmega328P, 16 MHz) with OLED UI, settings in EEPROM, and 3-channel current monitoring via INA3221.
 
 ## Features
@@ -83,3 +86,4 @@ Libraries used:
 - `src/button_input.*`: button debounce and short/long press events
 - `src/settings_store.*`: EEPROM load/save/validation
 - `src/app_types.h`: shared app structs/enums
+- `hardware/Kicad/Servo Tester/`: KiCad project files for PCB/schematic

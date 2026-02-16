@@ -8,6 +8,7 @@
 
 const char *AppController::modeLabel() const
 {
+  // Short labels are used in the OLED header.
   if (controlMode_ == CONTROL_POT)
   {
     return "POT";
@@ -23,6 +24,7 @@ const char *AppController::modeLabel() const
 
 uint8_t AppController::pulseToAngle(const uint16_t pulseUs, const Settings &settings) const
 {
+  // Convert pulse range to 0..180 for user-friendly display.
   if (settings.maxPulseUs <= settings.minPulseUs)
   {
     return 0;
@@ -46,6 +48,7 @@ void AppController::drawUi()
 {
   if (!displayReady_)
   {
+    // Skip all rendering if display init failed.
     return;
   }
 
@@ -99,11 +102,13 @@ void AppController::drawUi()
 
 void AppController::cycleStatusScreen()
 {
+  // Rotate STATUS -> CURRENT -> PEAK -> STATUS.
   statusScreen_ = static_cast<StatusScreen>((statusScreen_ + 1) % SCREEN_COUNT);
 }
 
 void AppController::resetSweepState()
 {
+  // Start SWP mode from min pulse and clear cycle counter.
   sweepPulseUs_ = savedSettings_.minPulseUs;
   sweepDirection_ = 1;
   sweepCycleCounter_ = 0;
@@ -113,6 +118,7 @@ void AppController::resetSweepState()
 
 void AppController::cycleControlMode(const int8_t direction)
 {
+  // Circular mode switch with UP/DOWN buttons.
   int8_t nextMode = static_cast<int8_t>(controlMode_) + direction;
   if (nextMode < 0)
   {
@@ -127,6 +133,7 @@ void AppController::cycleControlMode(const int8_t direction)
   controlMode_ = static_cast<ControlMode>(nextMode);
   if (controlMode_ != previousMode)
   {
+    // Counter is mode-local, reset when leaving/entering modes.
     sweepCycleCounter_ = 0;
     sweepReachedMax_ = false;
   }
@@ -139,6 +146,7 @@ void AppController::cycleControlMode(const int8_t direction)
 
 void AppController::enterSettingsMenu()
 {
+  // Work on a copy, commit only when user selects Save.
   editSettings_ = savedSettings_;
   selectedMenuItem_ = MENU_MIN_PULSE;
   uiMode_ = UI_MENU_NAVIGATION;
@@ -148,6 +156,7 @@ void AppController::exitSettingsMenu(const bool save)
 {
   if (save)
   {
+    // Apply and persist edited settings.
     savedSettings_ = editSettings_;
     SettingsStore::save(savedSettings_);
 
@@ -162,6 +171,7 @@ void AppController::exitSettingsMenu(const bool save)
 
 void AppController::adjustCurrentSetting(const int16_t delta)
 {
+  // Apply bounded edits per selected menu item.
   if (selectedMenuItem_ == MENU_MIN_PULSE)
   {
     const uint16_t maxAllowed = editSettings_.maxPulseUs - Config::MIN_PULSE_SPAN_US;
@@ -220,6 +230,7 @@ void AppController::adjustCurrentSetting(const int16_t delta)
 
 uint16_t AppController::computeSweepStepIntervalMs(const Settings &settings) const
 {
+  // Compute step period from target full-cycle duration.
   const uint32_t spanUs = static_cast<uint32_t>(settings.maxPulseUs - settings.minPulseUs);
   const uint32_t fullCycleUs = spanUs * 2U;
   const uint32_t stepsPerCycle = (fullCycleUs / Config::SWEEP_STEP_US) > 0U ? (fullCycleUs / Config::SWEEP_STEP_US) : 1U;
@@ -231,6 +242,7 @@ uint16_t AppController::computeSweepStepIntervalMs(const Settings &settings) con
 
 void AppController::updateServoOutput(const unsigned long nowMs)
 {
+  // Three independent output strategies: POT, CENTER, SWEEP.
   if (controlMode_ == CONTROL_POT)
   {
     const int potRaw = analogRead(Config::POT_PIN);
@@ -261,6 +273,7 @@ void AppController::updateServoOutput(const unsigned long nowMs)
     {
       lastSweepStepMs_ = nowMs;
 
+      // Move one discrete step, then clamp/flip direction at limits.
       const int32_t stepUs = (sweepDirection_ > 0) ? static_cast<int32_t>(Config::SWEEP_STEP_US)
                                                    : -static_cast<int32_t>(Config::SWEEP_STEP_US);
       const int32_t nextPulse = static_cast<int32_t>(sweepPulseUs_) + stepUs;
@@ -277,6 +290,7 @@ void AppController::updateServoOutput(const unsigned long nowMs)
         sweepDirection_ = 1;
         if (sweepReachedMax_ && sweepCycleCounter_ < UINT32_MAX)
         {
+          // Count one completed round-trip after MAX was reached.
           ++sweepCycleCounter_;
         }
         sweepReachedMax_ = false;
@@ -295,6 +309,7 @@ void AppController::updateServoOutput(const unsigned long nowMs)
 
 float AppController::readServoRailVoltageV() const
 {
+  // ADC divider reconstruction to servo rail voltage.
   const int raw = analogRead(Config::SERVO_VSENSE_PIN);
   const float adcV = (static_cast<float>(raw) * Config::SERVO_VSENSE_ADC_REF_V) / 1023.0f;
   const float ratio = (Config::SERVO_VSENSE_R1_OHMS + Config::SERVO_VSENSE_R2_OHMS) / Config::SERVO_VSENSE_R2_OHMS;
@@ -303,6 +318,7 @@ float AppController::readServoRailVoltageV() const
 
 void AppController::handleUiInput(const bool upPressed, const bool downPressed, const bool selectShortPress, const bool selectLongPress)
 {
+  // Input behavior depends on current UI mode.
   switch (uiMode_)
   {
   case UI_STATUS:
@@ -391,12 +407,14 @@ void AppController::handleUiInput(const bool upPressed, const bool downPressed, 
 
 void AppController::begin()
 {
+  // Load validated settings and initialize runtime defaults.
   savedSettings_ = SettingsStore::load();
   currentPulseUs_ = savedSettings_.minPulseUs;
   sweepPulseUs_ = savedSettings_.minPulseUs;
 
   Wire.begin();
 #if defined(WIRE_HAS_TIMEOUT)
+  // Recover from locked I2C lines without full MCU reset.
   Wire.setWireTimeout(25000, true);
 #endif
 
@@ -420,21 +438,25 @@ void AppController::begin()
   }
 
   inaMonitor_.begin(Wire);
+  // Short startup delay to let peripherals stabilize visually/electrically.
   delay(600);
 }
 
 void AppController::update()
 {
+  // Single main-loop tick for sensing, control, and rendering.
   const unsigned long nowMs = millis();
 
   if (Config::MODE_SWITCH_PIN != 255)
   {
+    // Optional discrete STD/HV switch input.
     const bool modeReading = Config::MODE_SWITCH_ACTIVE_LOW ? (digitalRead(Config::MODE_SWITCH_PIN) == LOW)
                                                             : (digitalRead(Config::MODE_SWITCH_PIN) == HIGH);
     hvMode_ = modeReading;
   }
   else
   {
+    // Automatic mode detection from measured servo rail voltage.
     servoRailVoltageV_ = readServoRailVoltageV();
     hvMode_ = (servoRailVoltageV_ >= Config::SERVO_VSENSE_HV_THRESHOLD_V);
   }

@@ -6,14 +6,17 @@
 
 namespace
 {
+// Single INA3221 driver instance.
 Adafruit_INA3221 g_inaDevice;
 } // namespace
 
 void InaMonitor::begin(TwoWire &wire)
 {
+  // Try sensor at configured I2C address.
   ready_ = g_inaDevice.begin(Config::INA3221_I2C_ADDRESS, &wire);
   if (ready_)
   {
+    // Per-channel shunt values are needed for current conversion.
     g_inaDevice.setShuntResistance(0, Config::INA3221_SHUNT_OHMS_CH1);
     g_inaDevice.setShuntResistance(1, Config::INA3221_SHUNT_OHMS_CH2);
     g_inaDevice.setShuntResistance(2, Config::INA3221_SHUNT_OHMS_CH3);
@@ -24,11 +27,13 @@ void InaMonitor::update(const unsigned long nowMs)
 {
   if (!ready_)
   {
+    // Keep previous values when sensor is unavailable.
     return;
   }
 
   if ((nowMs - lastUpdateMs_) < Config::INA3221_REFRESH_MS)
   {
+    // Respect configured refresh period to reduce I2C traffic.
     return;
   }
 
@@ -38,6 +43,7 @@ void InaMonitor::update(const unsigned long nowMs)
   ch2mA_ = g_inaDevice.getCurrentAmps(1) * 1000.0f * Config::INA3221_CAL_FACTOR_CH2;
   ch3mA_ = g_inaDevice.getCurrentAmps(2) * 1000.0f * Config::INA3221_CAL_FACTOR_CH3;
 
+  // Peak-hold logic used by the PEAK LCD screen.
   if (ch1mA_ > peakCh1mA_)
   {
     peakCh1mA_ = ch1mA_;

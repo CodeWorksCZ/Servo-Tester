@@ -8,6 +8,7 @@
 
 namespace
 {
+// Software SPI SSD1306 instance.
 Adafruit_SSD1306 display(
     Config::SCREEN_WIDTH,
     Config::SCREEN_HEIGHT,
@@ -19,6 +20,7 @@ Adafruit_SSD1306 display(
 
 void getMenuLabel(uint8_t item, char *buffer, size_t bufferLen, uint16_t minPulseUs, uint16_t maxPulseUs, bool reverse, uint16_t sweepCycleSec)
 {
+  // Build one menu line based on current item index and live values.
   switch (item)
   {
   case 0:
@@ -47,6 +49,7 @@ void getMenuLabel(uint8_t item, char *buffer, size_t bufferLen, uint16_t minPuls
 
 void printCurrentAutoUnit(float currentmA)
 {
+  // Use amps above 1000 mA for better readability on 128x64 display.
   if (currentmA >= 1000.0f || currentmA <= -1000.0f)
   {
     display.print(currentmA / 1000.0f, 2);
@@ -61,6 +64,7 @@ void printCurrentAutoUnit(float currentmA)
 
 void drawHeader(const __FlashStringHelper *title, bool hvMode, const char *modeLabel)
 {
+  // Common two-line header shared by all runtime screens.
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
 
@@ -83,6 +87,7 @@ namespace DisplayUi
 {
 bool begin()
 {
+  // Display object already has pin mapping from config constants.
   return display.begin(SSD1306_SWITCHCAPVCC);
 }
 
@@ -131,6 +136,7 @@ void drawStatusScreen(
   display.print(reverse ? F("ON") : F("OFF"));
   if (showSwpCounter)
   {
+    // SWP-only counter: number of completed MAX->MIN cycles.
     display.setCursor(56, 56);
     display.print(F("Cnt:"));
     display.print(swpCounter);
@@ -151,6 +157,7 @@ void drawCurrentScreen(bool sensorReady, float currentCh1mA, float currentCh2mA,
 
   if (!sensorReady)
   {
+    // Graceful error state if INA3221 is disconnected/miswired.
     display.setCursor(0, 26);
     display.print(F("INA3221 not found"));
     display.setCursor(0, 38);

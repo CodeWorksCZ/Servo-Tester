@@ -7,13 +7,17 @@
 class InaMonitor
 {
 public:
+  // Initialize INA3221 and channel shunt configuration.
   void begin(TwoWire &wire);
+  // Periodic non-blocking refresh from sensor.
   void update(unsigned long nowMs);
 
+  // Runtime status/readouts in milliamps.
   bool ready() const;
   float ch1mA() const;
   float ch2mA() const;
   float ch3mA() const;
+  // Peak hold values in milliamps since boot/reset.
   float peakCh1mA() const;
   float peakCh2mA() const;
   float peakCh3mA() const;
