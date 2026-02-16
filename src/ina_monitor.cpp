@@ -20,6 +20,10 @@ void InaMonitor::begin(TwoWire &wire)
     g_inaDevice.setShuntResistance(0, Config::INA3221_SHUNT_OHMS_CH1);
     g_inaDevice.setShuntResistance(1, Config::INA3221_SHUNT_OHMS_CH2);
     g_inaDevice.setShuntResistance(2, Config::INA3221_SHUNT_OHMS_CH3);
+    // Balance responsiveness and noise for servo current monitoring.
+    g_inaDevice.setAveragingMode(INA3221_AVG_16_SAMPLES);
+    g_inaDevice.setBusVoltageConvTime(INA3221_CONVTIME_1MS);
+    g_inaDevice.setShuntVoltageConvTime(INA3221_CONVTIME_1MS);
     // Configure hardware warning/critical thresholds.
     g_inaDevice.setWarningAlertThreshold(0, Config::INA3221_WARN_MA_CH1 / 1000.0f);
     g_inaDevice.setWarningAlertThreshold(1, Config::INA3221_WARN_MA_CH2 / 1000.0f);
