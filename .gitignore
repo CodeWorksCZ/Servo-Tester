@@ -13,3 +13,6 @@ Servo-Tester.code-workspace
 **/fp-info-cache
 **/*.kicad_prl
 **/*-backups/
+
+# Legacy KiCad path kept only for local files (do not track in git)
+hardware/Kicad/
