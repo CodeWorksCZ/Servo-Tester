@@ -90,4 +90,4 @@ Libraries used:
 - `src/button_input.*`: button debounce and short/long press events
 - `src/settings_store.*`: EEPROM load/save/validation
 - `src/app_types.h`: shared app structs/enums
-- `hardware/Kicad/Servo Tester/`: KiCad project files for PCB/schematic
+- `hardware/kicad/servo_tester/`: KiCad project files for PCB/schematic
