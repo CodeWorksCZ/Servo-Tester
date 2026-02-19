@@ -1,6 +1,23 @@
 Arduino Pro Mini (ATmega328P) - Pin Mapping
 Project: Servo Tester
 
+Connected pins (current config)
+- D2: Button UP - OK
+- D3: Button DOWN - OK
+- D4: Alert LED - OK
+- D5: Button SELECT 0 -OK
+- D6: Servo signal (PWM) - OK
+- D9: OLED MOSI (software SPI)
+- D10: OLED CLK (software SPI)
+- D11: OLED DC
+- D12: OLED CS
+- D13: OLED RESET
+- A0: Potentiometer input - OK
+- A1: Servo rail voltage sensing (ADC divider) - OK
+- A4: I2C SDA (INA3221) - OK
+- A5: I2C SCL (INA3221) - OK
+- D7: Not used in current config (reserved for optional STD/HV switch)
+
 Digital pins
 - D0 (RX): UART RX (USB-Serial programming/debug), not assigned to project I/O.
 - D1 (TX): UART TX (USB-Serial programming/debug), not assigned to project I/O.

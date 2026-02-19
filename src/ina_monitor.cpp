@@ -86,12 +86,17 @@ void InaMonitor::update(const unsigned long nowMs)
   }
 
   flags_ = g_inaDevice.getFlags();
-  warnCh1_ = (flags_ & INA3221_WARN_CH1) != 0;
-  warnCh2_ = (flags_ & INA3221_WARN_CH2) != 0;
-  warnCh3_ = (flags_ & INA3221_WARN_CH3) != 0;
-  critCh1_ = (flags_ & INA3221_CRITICAL_CH1) != 0;
-  critCh2_ = (flags_ & INA3221_CRITICAL_CH2) != 0;
-  critCh3_ = (flags_ & INA3221_CRITICAL_CH3) != 0;
+  const bool ch1Valid = busCh1V_ >= Config::INA3221_ALERT_MIN_BUS_V;
+  const bool ch2Valid = busCh2V_ >= Config::INA3221_ALERT_MIN_BUS_V;
+  const bool ch3Valid = busCh3V_ >= Config::INA3221_ALERT_MIN_BUS_V;
+
+  // Suppress false alerts on unpowered/floating channels.
+  warnCh1_ = ch1Valid && ((flags_ & INA3221_WARN_CH1) != 0);
+  warnCh2_ = ch2Valid && ((flags_ & INA3221_WARN_CH2) != 0);
+  warnCh3_ = ch3Valid && ((flags_ & INA3221_WARN_CH3) != 0);
+  critCh1_ = ch1Valid && ((flags_ & INA3221_CRITICAL_CH1) != 0);
+  critCh2_ = ch2Valid && ((flags_ & INA3221_CRITICAL_CH2) != 0);
+  critCh3_ = ch3Valid && ((flags_ & INA3221_CRITICAL_CH3) != 0);
 }
 
 bool InaMonitor::ready() const

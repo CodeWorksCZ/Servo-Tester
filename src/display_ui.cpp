@@ -4,6 +4,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
+#include "app_types.h"
 #include "config.h"
 
 namespace
@@ -47,7 +48,7 @@ void gaugeNeedleEndpoint(uint8_t valuePercent, int16_t &xOut, int16_t &yOut)
   yOut = y0 + ((y1 - y0) * frac) / 16;
 }
 
-void getMenuLabel(uint8_t item, char *buffer, size_t bufferLen, uint16_t minPulseUs, uint16_t maxPulseUs, bool reverse, uint16_t sweepCycleSec)
+void getMenuLabel(uint8_t item, char *buffer, size_t bufferLen, uint16_t minPulseUs, uint16_t maxPulseUs, bool reverse, uint16_t sweepCycleMs)
 {
   // Build one menu line based on current item index and live values.
   switch (item)
@@ -62,7 +63,7 @@ void getMenuLabel(uint8_t item, char *buffer, size_t bufferLen, uint16_t minPuls
     snprintf(buffer, bufferLen, "Reverse: %s", reverse ? "ON" : "OFF");
     break;
   case 3:
-    snprintf(buffer, bufferLen, "Sweep cycle: %us", sweepCycleSec);
+    snprintf(buffer, bufferLen, "Sweep cycle: %u.%us", sweepCycleMs / 1000U, (sweepCycleMs % 1000U) / 100U);
     break;
   case 4:
     snprintf(buffer, bufferLen, "Save & exit");
@@ -71,7 +72,10 @@ void getMenuLabel(uint8_t item, char *buffer, size_t bufferLen, uint16_t minPuls
     snprintf(buffer, bufferLen, "Cancel");
     break;
   default:
-    snprintf(buffer, bufferLen, "");
+    if (bufferLen > 0)
+    {
+      buffer[0] = '\0';
+    }
     break;
   }
 }
@@ -364,7 +368,7 @@ void drawCurrentPeakScreen(bool sensorReady, float peakCh1mA, float peakCh2mA, f
   display.display();
 }
 
-void drawSettingsScreen(uint8_t selectedMenuItem, bool editMode, uint16_t minPulseUs, uint16_t maxPulseUs, bool reverse, uint16_t sweepCycleSec)
+void drawSettingsScreen(uint8_t selectedMenuItem, bool editMode, uint16_t minPulseUs, uint16_t maxPulseUs, bool reverse, uint16_t sweepCycleMs)
 {
   display.clearDisplay();
   display.setTextSize(1);
@@ -380,7 +384,7 @@ void drawSettingsScreen(uint8_t selectedMenuItem, bool editMode, uint16_t minPul
 
   // Keep one line free for control hints at the bottom.
   constexpr uint8_t visibleRows = 3;
-  constexpr uint8_t menuItemCount = 5;
+  constexpr uint8_t menuItemCount = static_cast<uint8_t>(MENU_ITEM_COUNT);
   constexpr int16_t rowStartY = 14;
   constexpr int16_t rowStepY = 14;
   uint8_t firstVisible = 0;
@@ -399,7 +403,7 @@ void drawSettingsScreen(uint8_t selectedMenuItem, bool editMode, uint16_t minPul
     }
 
     char line[24];
-    getMenuLabel(item, line, sizeof(line), minPulseUs, maxPulseUs, reverse, sweepCycleSec);
+    getMenuLabel(item, line, sizeof(line), minPulseUs, maxPulseUs, reverse, sweepCycleMs);
 
     const int16_t y = rowStartY + (row * rowStepY);
     display.setCursor(0, y);

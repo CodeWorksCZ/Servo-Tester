@@ -217,7 +217,7 @@ void AppController::drawUi()
       editSettings_.minPulseUs,
       editSettings_.maxPulseUs,
       editSettings_.reverse,
-      editSettings_.sweepCycleSec);
+      editSettings_.sweepCycleMs);
 }
 
 void AppController::cycleStatusScreen()
@@ -332,19 +332,22 @@ void AppController::adjustCurrentSetting(const int16_t delta)
 
   if (selectedMenuItem_ == MENU_SWEEP_CYCLE)
   {
-    long candidate = static_cast<long>(editSettings_.sweepCycleSec) + (delta > 0 ? 1 : -1);
+    const long stepMs = (delta > 0)
+                            ? static_cast<long>(Config::SWEEP_CYCLE_STEP_MS)
+                            : -static_cast<long>(Config::SWEEP_CYCLE_STEP_MS);
+    long candidate = static_cast<long>(editSettings_.sweepCycleMs) + stepMs;
 
-    if (candidate < Config::SWEEP_CYCLE_MIN_SEC)
+    if (candidate < Config::SWEEP_CYCLE_MIN_MS)
     {
-      candidate = Config::SWEEP_CYCLE_MIN_SEC;
+      candidate = Config::SWEEP_CYCLE_MIN_MS;
     }
 
-    if (candidate > Config::SWEEP_CYCLE_MAX_SEC)
+    if (candidate > Config::SWEEP_CYCLE_MAX_MS)
     {
-      candidate = Config::SWEEP_CYCLE_MAX_SEC;
+      candidate = Config::SWEEP_CYCLE_MAX_MS;
     }
 
-    editSettings_.sweepCycleSec = static_cast<uint16_t>(candidate);
+    editSettings_.sweepCycleMs = static_cast<uint16_t>(candidate);
   }
 }
 
@@ -354,7 +357,7 @@ uint16_t AppController::computeSweepStepIntervalMs(const Settings &settings) con
   const uint32_t spanUs = static_cast<uint32_t>(settings.maxPulseUs - settings.minPulseUs);
   const uint32_t fullCycleUs = spanUs * 2U;
   const uint32_t stepsPerCycle = (fullCycleUs / Config::SWEEP_STEP_US) > 0U ? (fullCycleUs / Config::SWEEP_STEP_US) : 1U;
-  const uint32_t cycleMs = static_cast<uint32_t>(settings.sweepCycleSec) * 1000U;
+  const uint32_t cycleMs = static_cast<uint32_t>(settings.sweepCycleMs);
   const uint32_t intervalMs = cycleMs / stepsPerCycle;
 
   return static_cast<uint16_t>(intervalMs > 0U ? intervalMs : 1U);

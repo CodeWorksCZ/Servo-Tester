@@ -56,7 +56,7 @@ void drawVoltageScreen(
 // Peak current page for INA3221 channels.
 void drawCurrentPeakScreen(bool sensorReady, float peakCh1mA, float peakCh2mA, float peakCh3mA, bool hvMode, const char *modeLabel);
 // Scrollable settings page with edit/navigation hints.
-void drawSettingsScreen(uint8_t selectedMenuItem, bool editMode, uint16_t minPulseUs, uint16_t maxPulseUs, bool reverse, uint16_t sweepCycleSec);
+void drawSettingsScreen(uint8_t selectedMenuItem, bool editMode, uint16_t minPulseUs, uint16_t maxPulseUs, bool reverse, uint16_t sweepCycleMs);
 } // namespace DisplayUi
 
 #endif

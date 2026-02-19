@@ -60,12 +60,15 @@ constexpr float INA3221_CAL_FACTOR_CH2 = 1.0f;
 constexpr float INA3221_CAL_FACTOR_CH3 = 1.0f;
 constexpr uint16_t INA3221_REFRESH_MS = 200; // Sensor polling interval.
 // Alert thresholds in milliamps (shown as WR/CR on LCD).
-constexpr float INA3221_WARN_MA_CH1 = 1500.0f;
-constexpr float INA3221_WARN_MA_CH2 = 1500.0f;
-constexpr float INA3221_WARN_MA_CH3 = 1500.0f;
-constexpr float INA3221_CRIT_MA_CH1 = 2500.0f;
-constexpr float INA3221_CRIT_MA_CH2 = 2500.0f;
-constexpr float INA3221_CRIT_MA_CH3 = 2500.0f;
+// For 0.1 ohm shunts (R100), keep thresholds below ~1.64 A measurement limit.
+constexpr float INA3221_WARN_MA_CH1 = 900.0f;
+constexpr float INA3221_WARN_MA_CH2 = 900.0f;
+constexpr float INA3221_WARN_MA_CH3 = 900.0f;
+constexpr float INA3221_CRIT_MA_CH1 = 1300.0f;
+constexpr float INA3221_CRIT_MA_CH2 = 1300.0f;
+constexpr float INA3221_CRIT_MA_CH3 = 1300.0f;
+// Ignore alert flags for channels with effectively no bus voltage (floating/unwired).
+constexpr float INA3221_ALERT_MIN_BUS_V = 0.5f;
 
 // Servo pulse limits and edit behavior
 constexpr uint16_t PULSE_MIN_LIMIT = 500;
@@ -76,12 +79,13 @@ constexpr uint16_t PULSE_STEP_US = 10;
 constexpr uint16_t MIN_PULSE_SPAN_US = 100;
 // Sweep mode behavior
 constexpr uint16_t SWEEP_STEP_US = 5; // Delta applied every sweep step.
-constexpr uint16_t SWEEP_CYCLE_MIN_SEC = 1;
-constexpr uint16_t SWEEP_CYCLE_MAX_SEC = 30;
-constexpr uint16_t SWEEP_CYCLE_DEFAULT_SEC = 3;
+constexpr uint16_t SWEEP_CYCLE_MIN_MS = 500;
+constexpr uint16_t SWEEP_CYCLE_MAX_MS = 10000;
+constexpr uint16_t SWEEP_CYCLE_DEFAULT_MS = 3000;
+constexpr uint16_t SWEEP_CYCLE_STEP_MS = 500;
 
 // EEPROM storage layout/version
-constexpr uint8_t SETTINGS_VERSION = 2;
+constexpr uint8_t SETTINGS_VERSION = 3;
 constexpr int EEPROM_ADDR = 0; // Base EEPROM address for Settings struct.
 } // namespace Config
 

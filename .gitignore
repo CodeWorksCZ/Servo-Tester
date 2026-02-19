@@ -9,3 +9,7 @@ Servo-Tester.code-workspace
 **/#auto_saved_files#
 **/_autosave-*.kicad_sch
 **/_autosave-*.kicad_pcb
+**/*.lck
+**/fp-info-cache
+**/*.kicad_prl
+**/*-backups/

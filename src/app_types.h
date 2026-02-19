@@ -10,7 +10,7 @@ struct Settings
   uint16_t minPulseUs;    // Servo minimum pulse width in microseconds.
   uint16_t maxPulseUs;    // Servo maximum pulse width in microseconds.
   uint8_t reverse;        // 0 = normal, 1 = reversed potentiometer direction.
-  uint16_t sweepCycleSec; // Target duration for one full sweep cycle.
+  uint16_t sweepCycleMs;  // Target duration for one full sweep cycle.
 };
 
 // Debounced button runtime state.

@@ -31,7 +31,7 @@ RC servo tester for Arduino Pro Mini (ATmega328P, 16 MHz) with OLED UI, settings
 - `Min pulse` (us)
 - `Max pulse` (us)
 - `Reverse`
-- `Sweep cycle` (1-30 s, default 3 s)
+- `Sweep cycle` (0.5-10.0 s, default 3.0 s)
 - `Save & exit`
 - `Cancel`
 
