@@ -90,10 +90,6 @@ Libraries used:
 - `src/button_input.*`: button debounce and short/long press events
 - `src/settings_store.*`: EEPROM load/save/validation
 - `src/app_types.h`: shared app structs/enums
-- `hardware/kicad/servo_tester/`: KiCad project files for PCB/schematic
+- `hardware/Kicad/Servo Tester/`: KiCad project files for PCB/schematic
 - `hardware/Schematics/`: exported schematic PDFs
 - `hardware/Datasheets/`: component datasheets
-
-## Notes
-
-- Legacy path `hardware/Kicad/` is ignored and not tracked in git.
