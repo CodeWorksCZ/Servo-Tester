@@ -11,11 +11,11 @@ namespace Config
 // SSD1306 OLED parameters (software SPI wiring)
 constexpr uint8_t SCREEN_WIDTH = 128;
 constexpr uint8_t SCREEN_HEIGHT = 64;
-constexpr uint8_t OLED_MOSI = 9;   // Display DIN / D1
-constexpr uint8_t OLED_CLK = 10;   // Display CLK / D0
-constexpr uint8_t OLED_DC = 11;    // Display D/C
-constexpr uint8_t OLED_CS = 12;    // Display CS
-constexpr uint8_t OLED_RESET = 13; // Display RST
+constexpr uint8_t OLED_MOSI = 10;   // Display DIN / D1
+constexpr uint8_t OLED_CLK = 9;   // Display CLK / D0
+constexpr uint8_t OLED_DC = 12;    // Display D/C
+constexpr uint8_t OLED_CS = 13;    // Display CS
+constexpr uint8_t OLED_RESET = 11; // Display RST
 
 // Device I/O pins
 constexpr uint8_t SERVO_PIN = 6;

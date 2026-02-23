@@ -7,11 +7,11 @@ Connected pins (current config)
 - D4: Alert LED - OK
 - D5: Button SELECT 0 -OK
 - D6: Servo signal (PWM) - OK
-- D9: OLED MOSI (software SPI)
-- D10: OLED CLK (software SPI)
-- D11: OLED DC
-- D12: OLED CS
-- D13: OLED RESET
+- D9: OLED CLK (software SPI)
+- D10: OLED MOSI (software SPI)
+- D11: OLED RESET
+- D12: OLED DC
+- D13: OLED CS
 - A0: Potentiometer input - OK
 - A1: Servo rail voltage sensing (ADC divider) - OK
 - A4: I2C SDA (INA3221) - OK
@@ -28,11 +28,11 @@ Digital pins
 - D6: SERVO_PIN (servo signal output, PWM/timer driven by Servo library).
 - D7: Free (mode switch pin disabled in config, MODE_SWITCH_PIN = 255).
 - D8: Free.
-- D9: OLED_MOSI (SSD1306 software SPI, display DIN/D1).
-- D10: OLED_CLK (SSD1306 software SPI, display CLK/D0).
-- D11: OLED_DC (SSD1306 D/C).
-- D12: OLED_CS (SSD1306 chip select).
-- D13: OLED_RESET (SSD1306 reset).
+- D9: OLED_CLK (SSD1306 software SPI, display CLK/D0).
+- D10: OLED_MOSI (SSD1306 software SPI, display DIN/D1).
+- D11: OLED_RESET (SSD1306 reset).
+- D12: OLED_DC (SSD1306 D/C).
+- D13: OLED_CS (SSD1306 chip select).
 
 Analog pins
 - A0: POT_PIN (servo control potentiometer input).
