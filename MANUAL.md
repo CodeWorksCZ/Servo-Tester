@@ -1,72 +1,72 @@
-# Servo Tester - Manual Pouzivani
+# Servo Tester - User Manual
 
-## 1. Co zarizeni umi
+## 1. Device Purpose
 
-RC servo tester postaveny na Arduino Pro Mini:
-- rizeni serva (`POT`, `CENTER`, `SWEEP`)
-- OLED uzivatelske rozhrani
-- mereni proudu/napeti pres INA3221 az na 3 kanalech
+This project is an RC servo tester based on Arduino Pro Mini with:
+- servo control modes (`POT`, `CENTER`, `SWEEP`)
+- OLED user interface
+- current and voltage monitoring through INA3221 on up to 3 channels
 
-## 2. Zakladni zapojeni
+## 2. Basic Wiring
 
-Aktualni mapovani pinu je v `pins.txt`.
+Use `pins.txt` as the current source of truth for pin mapping.
 
-Minimum pro beh:
-- Arduino Pro Mini + nahrany firmware
-- OLED displej (software SPI)
-- tlacitko `SELECT` (idealne i `UP` + `DOWN`)
-- servo signal na `D6`
-- spolecna `GND` mezi Arduinem a napajenim serv
+Minimum required for operation:
+- Arduino Pro Mini with uploaded firmware
+- OLED display (software SPI)
+- `SELECT` button, ideally also `UP` and `DOWN`
+- servo signal on `D6`
+- common `GND` between Arduino and servo power
 
-INA3221 (volitelne):
+Optional INA3221 connection:
 - `A4` = `SDA`
 - `A5` = `SCL`
 
-## 3. Napajeni
+## 3. Power
 
-- logika (Arduino + OLED + INA3221): stabilnich `5V`
-- serva: podle typu (`STD`/`HV`)
-- vzdy spolecna zem logiky a servo vetve
+- logic side (Arduino + OLED + INA3221): stable `5V`
+- servo side: according to servo type (`STD` or `HV`)
+- always use a common ground between logic and servo power
 
-Doporuceni pro servo rail:
-- bulk kondenzator `470-1000 uF`
-- lokalni `100 nF` u kazdeho servo konektoru
+Recommended on the servo rail:
+- bulk capacitor `470-1000 uF`
+- local `100 nF` capacitor near each servo connector
 
-## 4. Build a Upload
+## 4. Build and Upload
 
-Z root slozky projektu:
+From the project root:
 
 ```powershell
 & "$env:USERPROFILE\.platformio\penv\Scripts\platformio.exe" run
 & "$env:USERPROFILE\.platformio\penv\Scripts\platformio.exe" run -t upload
 ```
 
-## 5. Ovladani
+## 5. Controls
 
-Ve status modu:
-- kratky stisk `SELECT`: dalsi obrazovka
-- dlouhy stisk `SELECT`: vstup do settings
-- `UP` / `DOWN`: zmena control modu (`POT` / `CENTER` / `SWEEP`)
+In status mode:
+- short press `SELECT`: next screen
+- long press `SELECT`: enter settings
+- `UP` / `DOWN`: change control mode (`POT` / `CENTER` / `SWEEP`)
 
-V settings:
-- `UP` / `DOWN`: pohyb v menu nebo zmena hodnoty
-- `SELECT`: potvrzeni / vstup do editace / ukonceni editace
+In settings:
+- `UP` / `DOWN`: move in the menu or change the current value
+- `SELECT`: confirm / enter edit mode / leave edit mode
 
-## 6. Rezimy rizeni
+## 6. Control Modes
 
-- `POT`: poloha serva podle potenciometru
-- `CENTER`: pevny stred
-- `SWEEP`: automaticky cyklus min <-> max
+- `POT`: servo position follows the potentiometer
+- `CENTER`: fixed center position
+- `SWEEP`: automatic cycle between minimum and maximum pulse
 
-V `SWEEP` se na status obrazovce zobrazuje citac cyklu.
+In `SWEEP`, the status screen shows a completed cycle counter.
 
-## 7. OLED obrazovky
+## 7. OLED Screens
 
 - `STATUS`: pulse, angle, range, reverse, SWP counter
-- `GAUGE`: rucicka 0-100 %
-- `CURRENT`: proudy na kanalech + `WR/CR`
-- `VBUS`: napeti bus a pokles (`dV`) na kazdem kanalu
-- `PEAK`: maximalni proud na kanalech
+- `GAUGE`: 0-100% needle gauge
+- `CURRENT`: channel currents and `WR/CR` flags
+- `VBUS`: bus voltage and voltage droop (`dV`) on each channel
+- `PEAK`: maximum current on each channel
 
 ## 8. Settings
 
@@ -77,29 +77,29 @@ V `SWEEP` se na status obrazovce zobrazuje citac cyklu.
 - `Save & exit`
 - `Cancel`
 
-Nastaveni se uklada do EEPROM.
+Settings are stored in EEPROM.
 
-## 9. Alerty (`WR` / `CR`)
+## 9. Alerts (`WR` / `CR`)
 
 - `WR` = warning threshold
 - `CR` = critical threshold
 
-Thresholdy jsou v `include/config.h`.
+Threshold values are configured in `include/config.h`.
 
-## 10. Reseni problemu
+## 10. Troubleshooting
 
-### Servo cukne nebo se nehrybe spravne
-- over napajeci napeti a proudovou rezervu pro servo
-- over spolecnou `GND`
-- otestuj nejdriv `CENTER` mod
-- zkontroluj rozsah pulzu v settings
+### Servo jitters or does not move correctly
+- verify servo supply voltage and current capability
+- verify common `GND`
+- test `CENTER` mode first
+- check pulse range in settings
 
-### OLED nic nezobrazuje
-- over piny podle `include/config.h`
-- over napajeni OLED a `GND`
-- kdyz je treba, zkontroluj `CLK` a `MOSI`
+### OLED shows nothing
+- verify pins against `include/config.h`
+- check OLED power and `GND`
+- if needed, recheck `CLK` and `MOSI`
 
-### INA hlasi alerty na nepouzitem kanalu
-- nepouzity kanal muze plavat
-- sniz/vypni thresholdy pro nepouzity kanal
-- HW reseni: vysokohodnotovy odpor mezi `IN+` a `IN-` na nepouzitem kanalu
+### INA reports alerts on an unused channel
+- an unused channel may float
+- reduce or disable thresholds for that unused channel
+- hardware mitigation: add a high-value resistor between unused `IN+` and `IN-`
