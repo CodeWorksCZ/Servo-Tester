@@ -13,4 +13,4 @@ Servo-Tester.code-workspace
 **/fp-info-cache
 **/*.kicad_prl
 **/*-backups/
-.history
+.history/
