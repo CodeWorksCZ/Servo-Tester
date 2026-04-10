@@ -7,6 +7,8 @@ RC servo tester for Arduino Pro Mini (ATmega328P, 16 MHz) with OLED UI, settings
 
 Uzivatelsky manual: `MANUAL.md`
 
+![Servo Tester Render](hardware/Images/Render.png)
+
 ## Features
 
 - Servo control modes: `POT`, `CENTER`, `SWEEP`
