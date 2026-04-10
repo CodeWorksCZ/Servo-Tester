@@ -1,0 +1,4 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "Servo Tester") (type "KiCad") (uri "${KIPRJMOD}/Libraries/Symbols/Servo Tester.kicad_sym") (options "") (descr ""))
+)

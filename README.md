@@ -5,6 +5,8 @@
 
 RC servo tester for Arduino Pro Mini (ATmega328P, 16 MHz) with OLED UI, settings in EEPROM, and 3-channel current monitoring via INA3221.
 
+Uzivatelsky manual: `MANUAL.md`
+
 ## Features
 
 - Servo control modes: `POT`, `CENTER`, `SWEEP`
@@ -42,11 +44,11 @@ RC servo tester for Arduino Pro Mini (ATmega328P, 16 MHz) with OLED UI, settings
 - `D5`: `BTN_SELECT_PIN`
 - `D6`: `SERVO_PIN`
 - `D4`: `ALERT_LED_PIN` (optional alert LED)
-- `D9`: OLED `MOSI`
-- `D10`: OLED `CLK`
-- `D11`: OLED `DC`
-- `D12`: OLED `CS`
-- `D13`: OLED `RESET`
+- `D9`: OLED `CLK`
+- `D10`: OLED `MOSI`
+- `D11`: OLED `RESET`
+- `D12`: OLED `DC`
+- `D13`: OLED `CS`
 - `A0`: potentiometer
 - `A1`: servo rail voltage sensing (divider)
 - `A4`: I2C `SDA` (INA3221)

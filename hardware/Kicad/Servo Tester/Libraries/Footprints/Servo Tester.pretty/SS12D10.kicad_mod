@@ -1,0 +1,134 @@
+(footprint "SS12D10"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 8.55 -5.225 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "83437954-64aa-4483-999a-c46e3f30eb5a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+		)
+	)
+	(property "Value" "SS-12DXX"
+		(at 0.175 -5.475 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "7d3b7db6-5755-47a4-9d7d-3a46d5aa465d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" "SS-12D10G5"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "03a24279-8a7a-46b9-a000-088d980ccb4a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d00fde75-0277-4f7b-9ac8-39778abdd70b")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property ki_fp_filters "SS-12D")
+	(sheetname "/")
+	(sheetfile "Servo Tester.kicad_sch")
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_rect
+		(start -7 -3.5)
+		(end 7 3.5)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "337bd29c-899e-45e4-a376-be462a9a7b2f")
+	)
+	(fp_rect
+		(start -2.6 -3.475)
+		(end 2.375 3.5)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "38ad1042-ee9c-4674-aecb-b41de183615a")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0.025 4.325 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "e96fa1d2-8c06-4d3c-bfaf-9739d4f4a4c2")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" thru_hole roundrect
+		(at -4.7 0 90)
+		(size 3.5 3)
+		(drill 1.5)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.15)
+		(uuid "e773c108-633b-4b5a-a0b8-d6684f3928e3")
+	)
+	(pad "2" thru_hole roundrect
+		(at 0 0 90)
+		(size 3.5 3)
+		(drill 1.5)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.15)
+		(uuid "6f7361bc-89ad-4c64-a92d-5a26948e9b26")
+	)
+	(pad "3" thru_hole roundrect
+		(at 4.7 0 90)
+		(size 3.5 3)
+		(drill 1.5)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.15)
+		(uuid "a8e9650d-8d09-4abd-878a-5cd77e39ad30")
+	)
+	(embedded_fonts no)
+	(model "${KICAD_MY_LIBS}/3D_Models/Slide-Switches/ss-12d10g5r.stp"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 -0 -0)
+		)
+	)
+)
