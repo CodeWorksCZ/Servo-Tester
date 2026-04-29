@@ -34,6 +34,7 @@ private:
   void updateServoOutput(unsigned long nowMs);
   float readServoRailVoltageV() const;
   void updateAlertLed() const;
+  void updatePowerModeLeds() const;
   void handleUiInput(bool upPressed, bool downPressed, bool selectShortPress, bool selectLongPress);
 
   // Hardware/service modules.
@@ -61,6 +62,7 @@ private:
   int8_t sweepDirection_ = 1;
   uint32_t sweepCycleCounter_ = 0;
   bool sweepReachedMax_ = false;
+  bool sweepBurnDone_ = false;
 
   // Periodic task timing.
   unsigned long lastSweepStepMs_ = 0;

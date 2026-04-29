@@ -11,6 +11,7 @@ struct Settings
   uint16_t maxPulseUs;    // Servo maximum pulse width in microseconds.
   uint8_t reverse;        // 0 = normal, 1 = reversed potentiometer direction.
   uint16_t sweepCycleMs;  // Target duration for one full sweep cycle.
+  uint16_t burnCycles;    // 0 = infinite SWEEP, otherwise stop after this many cycles.
 };
 
 // Debounced button runtime state.
@@ -39,9 +40,10 @@ enum MenuItem : uint8_t
   MENU_MAX_PULSE = 1,
   MENU_REVERSE = 2,
   MENU_SWEEP_CYCLE = 3,
-  MENU_SAVE_EXIT = 4,
-  MENU_CANCEL = 5,
-  MENU_ITEM_COUNT = 6
+  MENU_BURN_CYCLES = 4,
+  MENU_SAVE_EXIT = 5,
+  MENU_CANCEL = 6,
+  MENU_ITEM_COUNT = 7
 };
 
 // Pages visible from the status screen cycle.

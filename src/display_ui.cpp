@@ -6,6 +6,7 @@
 
 #include "app_types.h"
 #include "config.h"
+#include "lang.h"
 
 namespace
 {
@@ -48,28 +49,31 @@ void gaugeNeedleEndpoint(uint8_t valuePercent, int16_t &xOut, int16_t &yOut)
   yOut = y0 + ((y1 - y0) * frac) / 16;
 }
 
-void getMenuLabel(uint8_t item, char *buffer, size_t bufferLen, uint16_t minPulseUs, uint16_t maxPulseUs, bool reverse, uint16_t sweepCycleMs)
+void getMenuLabel(uint8_t item, char *buffer, size_t bufferLen, uint16_t minPulseUs, uint16_t maxPulseUs, bool reverse, uint16_t sweepCycleMs, uint16_t burnCycles)
 {
   // Build one menu line based on current item index and live values.
   switch (item)
   {
   case 0:
-    snprintf(buffer, bufferLen, "Min pulse: %u", minPulseUs);
+    snprintf_P(buffer, bufferLen, TXT_FMT_MIN_PULSE, minPulseUs);
     break;
   case 1:
-    snprintf(buffer, bufferLen, "Max pulse: %u", maxPulseUs);
+    snprintf_P(buffer, bufferLen, TXT_FMT_MAX_PULSE, maxPulseUs);
     break;
   case 2:
-    snprintf(buffer, bufferLen, "Reverse: %s", reverse ? "ON" : "OFF");
+    snprintf_P(buffer, bufferLen, TXT_FMT_REVERSE, reverse ? TXT_ON : TXT_OFF);
     break;
   case 3:
-    snprintf(buffer, bufferLen, "Sweep cycle: %u.%us", sweepCycleMs / 1000U, (sweepCycleMs % 1000U) / 100U);
+    snprintf_P(buffer, bufferLen, TXT_FMT_SWEEP_CYCLE, sweepCycleMs / 1000U, (sweepCycleMs % 1000U) / 100U);
     break;
   case 4:
-    snprintf(buffer, bufferLen, "Save & exit");
+    snprintf_P(buffer, bufferLen, TXT_FMT_BURN_CYCLES, burnCycles);
     break;
   case 5:
-    snprintf(buffer, bufferLen, "Cancel");
+    snprintf_P(buffer, bufferLen, TXT_FMT_SAVE_EXIT);
+    break;
+  case 6:
+    snprintf_P(buffer, bufferLen, TXT_FMT_CANCEL);
     break;
   default:
     if (bufferLen > 0)
@@ -86,12 +90,12 @@ void printCurrentAutoUnit(float currentmA)
   if (currentmA >= 1000.0f || currentmA <= -1000.0f)
   {
     display.print(currentmA / 1000.0f, 2);
-    display.print(F(" A"));
+    display.print(TXT_UNIT_A);
   }
   else
   {
     display.print(currentmA, 1);
-    display.print(F(" mA"));
+    display.print(TXT_UNIT_MA);
   }
 }
 
@@ -99,15 +103,15 @@ void printAlertToken(bool warn, bool crit)
 {
   if (crit)
   {
-    display.print(F("CR"));
+    display.print(TXT_ALERT_CRIT);
   }
   else if (warn)
   {
-    display.print(F("WR"));
+    display.print(TXT_ALERT_WARN);
   }
   else
   {
-    display.print(F("--"));
+    display.print(TXT_ALERT_NONE);
   }
 }
 
@@ -121,12 +125,12 @@ void drawHeader(const __FlashStringHelper *title, bool hvMode, const char *modeL
   display.print(title);
 
   display.setCursor(74, 0);
-  display.print(F("M:"));
+  display.print(TXT_HEADER_MODE);
   display.print(modeLabel != nullptr ? modeLabel : "---");
 
   display.setCursor(0, 9);
-  display.print(F("PWR:"));
-  display.print(hvMode ? F("HV") : F("STD"));
+  display.print(TXT_HEADER_POWER);
+  display.print(hvMode ? TXT_POWER_HV : TXT_POWER_STD);
 
   display.drawFastHLine(0, 18, Config::SCREEN_WIDTH, SSD1306_WHITE);
 }
@@ -146,7 +150,7 @@ void drawBootScreen()
   display.setTextColor(SSD1306_WHITE);
   display.setTextSize(1);
   display.setCursor(0, 24);
-  display.println(F("Starting..."));
+  display.println(TXT_BOOT);
   display.display();
 }
 
@@ -159,41 +163,51 @@ void drawStatusScreen(
     bool hvMode,
     const char *modeLabel,
     bool showSwpCounter,
-    uint32_t swpCounter)
+    uint32_t swpCounter,
+    uint16_t burnCycles)
 {
   display.clearDisplay();
-  drawHeader(F("STATUS"), hvMode, modeLabel);
+  drawHeader(TXT_SCREEN_STATUS, hvMode, modeLabel);
 
   display.setCursor(0, 22);
-  display.print(F("Pulse:"));
+  display.print(TXT_PULSE);
   display.print(currentPulseUs);
-  display.println(F("us"));
+  display.println(TXT_US);
 
   display.setCursor(0, 34);
-  display.print(F("Angle:"));
+  display.print(TXT_ANGLE);
   display.print(angleDeg);
-  display.println(F("deg"));
+  display.println(TXT_DEG);
 
   display.setCursor(0, 46);
-  display.print(F("Range:"));
+  display.print(TXT_RANGE);
   display.print(minPulseUs);
-  display.print(F("-"));
+  display.print(TXT_DASH);
   display.print(maxPulseUs);
 
   display.setCursor(0, 56);
-  display.print(F("Rev:"));
-  display.print(reverse ? F("ON") : F("OFF"));
+  display.print(TXT_REVERSE);
+  display.print(reverse ? TXT_ON : TXT_OFF);
   if (showSwpCounter)
   {
     // SWP-only counter: number of completed MAX->MIN cycles.
     display.setCursor(56, 56);
-    display.print(F("Cnt:"));
-    display.print(swpCounter);
+    if (burnCycles > 0)
+    {
+      const uint16_t left = (swpCounter >= burnCycles) ? 0 : static_cast<uint16_t>(burnCycles - swpCounter);
+      display.print(TXT_LEFT);
+      display.print(left);
+    }
+    else
+    {
+      display.print(TXT_COUNT);
+      display.print(swpCounter);
+    }
   }
   else
   {
     display.setCursor(56, 56);
-    display.print(F("U/D:Mode"));
+    display.print(TXT_HINT_MODE);
   }
 
   display.display();
@@ -202,7 +216,7 @@ void drawStatusScreen(
 void drawGaugeScreen(uint8_t valuePercent, bool hvMode, const char *modeLabel)
 {
   display.clearDisplay();
-  drawHeader(F("GAUGE"), hvMode, modeLabel);
+  drawHeader(TXT_SCREEN_GAUGE, hvMode, modeLabel);
 
   for (uint8_t i = 0; i < (GAUGE_POINT_COUNT - 1); ++i)
   {
@@ -222,7 +236,7 @@ void drawGaugeScreen(uint8_t valuePercent, bool hvMode, const char *modeLabel)
 
   display.setCursor(54, 49);
   display.print(valuePercent);
-  display.print(F("%"));
+  display.print(TXT_PERCENT);
 
   display.display();
 }
@@ -242,39 +256,39 @@ void drawCurrentScreen(
     const char *modeLabel)
 {
   display.clearDisplay();
-  drawHeader(F("CURRENT"), hvMode, modeLabel);
+  drawHeader(TXT_SCREEN_CURRENT, hvMode, modeLabel);
 
   if (!sensorReady)
   {
     // Graceful error state if INA3221 is disconnected/miswired.
     display.setCursor(0, 26);
-    display.print(F("INA3221 not found"));
+    display.print(TXT_INA_NOT_FOUND);
     display.setCursor(0, 38);
-    display.print(F("Check I2C wiring"));
+    display.print(TXT_CHECK_I2C);
     display.display();
     return;
   }
 
   display.setCursor(0, 22);
-  display.print(F("CH1: "));
+  display.print(TXT_CH1);
   printCurrentAutoUnit(currentCh1mA);
   display.setCursor(106, 22);
   printAlertToken(warnCh1, critCh1);
 
   display.setCursor(0, 34);
-  display.print(F("CH2: "));
+  display.print(TXT_CH2);
   printCurrentAutoUnit(currentCh2mA);
   display.setCursor(106, 34);
   printAlertToken(warnCh2, critCh2);
 
   display.setCursor(0, 46);
-  display.print(F("CH3: "));
+  display.print(TXT_CH3);
   printCurrentAutoUnit(currentCh3mA);
   display.setCursor(106, 46);
   printAlertToken(warnCh3, critCh3);
 
   display.setCursor(0, 56);
-  display.print(F("S:Next H:Menu"));
+  display.print(TXT_HINT_NEXT_MENU);
 
   display.display();
 }
@@ -297,12 +311,12 @@ void drawVoltageScreen(
     const char *modeLabel)
 {
   display.clearDisplay();
-  drawHeader(F("VBUS"), hvMode, modeLabel);
+  drawHeader(TXT_SCREEN_VBUS, hvMode, modeLabel);
 
   if (!sensorReady)
   {
     display.setCursor(0, 26);
-    display.print(F("INA3221 not found"));
+    display.print(TXT_INA_NOT_FOUND);
     display.display();
     return;
   }
@@ -310,7 +324,7 @@ void drawVoltageScreen(
   display.setCursor(0, 22);
   display.print(F("1:"));
   display.print(busCh1V, 2);
-  display.print(F("V d"));
+  display.print(TXT_V_DROOP);
   display.print(droopCh1V, 2);
   display.setCursor(106, 22);
   printAlertToken(warnCh1, critCh1);
@@ -318,7 +332,7 @@ void drawVoltageScreen(
   display.setCursor(0, 34);
   display.print(F("2:"));
   display.print(busCh2V, 2);
-  display.print(F("V d"));
+  display.print(TXT_V_DROOP);
   display.print(droopCh2V, 2);
   display.setCursor(106, 34);
   printAlertToken(warnCh2, critCh2);
@@ -326,13 +340,13 @@ void drawVoltageScreen(
   display.setCursor(0, 46);
   display.print(F("3:"));
   display.print(busCh3V, 2);
-  display.print(F("V d"));
+  display.print(TXT_V_DROOP);
   display.print(droopCh3V, 2);
   display.setCursor(106, 46);
   printAlertToken(warnCh3, critCh3);
 
   display.setCursor(0, 56);
-  display.print(F("S:Next H:Menu"));
+  display.print(TXT_HINT_NEXT_MENU);
 
   display.display();
 }
@@ -340,46 +354,46 @@ void drawVoltageScreen(
 void drawCurrentPeakScreen(bool sensorReady, float peakCh1mA, float peakCh2mA, float peakCh3mA, bool hvMode, const char *modeLabel)
 {
   display.clearDisplay();
-  drawHeader(F("PEAK"), hvMode, modeLabel);
+  drawHeader(TXT_SCREEN_PEAK, hvMode, modeLabel);
 
   if (!sensorReady)
   {
     display.setCursor(0, 26);
-    display.print(F("INA3221 not found"));
+    display.print(TXT_INA_NOT_FOUND);
     display.display();
     return;
   }
 
   display.setCursor(0, 22);
-  display.print(F("CH1 max:"));
+  display.print(TXT_CH1_MAX);
   printCurrentAutoUnit(peakCh1mA);
 
   display.setCursor(0, 34);
-  display.print(F("CH2 max:"));
+  display.print(TXT_CH2_MAX);
   printCurrentAutoUnit(peakCh2mA);
 
   display.setCursor(0, 46);
-  display.print(F("CH3 max:"));
+  display.print(TXT_CH3_MAX);
   printCurrentAutoUnit(peakCh3mA);
 
   display.setCursor(0, 56);
-  display.print(F("S:Next H:Menu"));
+  display.print(TXT_HINT_NEXT_MENU);
 
   display.display();
 }
 
-void drawSettingsScreen(uint8_t selectedMenuItem, bool editMode, uint16_t minPulseUs, uint16_t maxPulseUs, bool reverse, uint16_t sweepCycleMs)
+void drawSettingsScreen(uint8_t selectedMenuItem, bool editMode, uint16_t minPulseUs, uint16_t maxPulseUs, bool reverse, uint16_t sweepCycleMs, uint16_t burnCycles)
 {
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
 
   display.setCursor(0, 0);
-  display.print(F("Settings"));
+  display.print(TXT_SETTINGS);
   if (editMode)
   {
     display.setCursor(86, 0);
-    display.print(F("EDIT"));
+    display.print(TXT_EDIT);
   }
 
   // Keep one line free for control hints at the bottom.
@@ -403,7 +417,7 @@ void drawSettingsScreen(uint8_t selectedMenuItem, bool editMode, uint16_t minPul
     }
 
     char line[24];
-    getMenuLabel(item, line, sizeof(line), minPulseUs, maxPulseUs, reverse, sweepCycleMs);
+    getMenuLabel(item, line, sizeof(line), minPulseUs, maxPulseUs, reverse, sweepCycleMs, burnCycles);
 
     const int16_t y = rowStartY + (row * rowStepY);
     display.setCursor(0, y);
@@ -415,11 +429,11 @@ void drawSettingsScreen(uint8_t selectedMenuItem, bool editMode, uint16_t minPul
   display.setCursor(0, 56);
   if (editMode)
   {
-    display.print(F("U/D:Val SEL:Done"));
+    display.print(TXT_HINT_EDIT);
   }
   else
   {
-    display.print(F("U/D:Item SEL:OK"));
+    display.print(TXT_HINT_NAV);
   }
 
   display.display();

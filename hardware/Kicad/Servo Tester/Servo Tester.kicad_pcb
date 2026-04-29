@@ -123,14 +123,14 @@
 			(outputdirectory "")
 		)
 	)
-	(footprint "Servo Tester:R_0805_2012Metric"
+	(footprint "Resistor_SMD:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "04286a23-8794-4191-9722-c5dc4da1bfab")
 		(at 175 105.25 -90)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
 		(property "Reference" "R11"
-			(at 0 -1.65 90)
+			(at 0 -1.65 270)
 			(layer "F.SilkS")
 			(uuid "b577d709-78eb-4734-a9fc-abf946cb9b32")
 			(effects
@@ -140,8 +140,8 @@
 				)
 			)
 		)
-		(property "Value" "R"
-			(at 0 1.65 90)
+		(property "Value" "10R"
+			(at 0 1.65 270)
 			(layer "F.Fab")
 			(uuid "4539f971-193e-4c5e-aff6-575b2e88c514")
 			(effects
@@ -152,38 +152,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "0876a7f3-cd21-4d7b-a0fe-3dd9fbc5d0ae")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Resistor"
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "9f804e40-e49e-490f-8dd7-95f1886f3b0e")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 270)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "4062c8d3-4ecd-4fa6-8105-3093c49ab36f")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -191,6 +177,12 @@
 		(path "/ad51ccd9-a93f-4ec6-9aba-b7ae999ef798")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -236,7 +228,7 @@
 			(uuid "94ff9251-273d-473e-bb7c-5496140e0fb8")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(uuid "b3aad545-453c-4791-97f4-adcdd05b0a5b")
 			(effects
@@ -277,7 +269,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:SS12D11"
+	(footprint "CodeWorks-Slide_Switches:SS12D11"
 		(layer "F.Cu")
 		(uuid "04cf6272-0bf0-4778-a76e-8c314984f80c")
 		(at 100.393 75.75 90)
@@ -335,6 +327,12 @@
 		(path "/9fa7339f-3637-4c4c-ac20-4105f56d5875")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2" "3")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_rect
@@ -420,14 +418,14 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:C_0805_2012Metric"
+	(footprint "Capacitor_SMD:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "05a3408b-d9d6-4bbd-8e08-6e39558d9038")
 		(at 206.25 101.75 180)
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing)")
 		(tags "capacitor")
 		(property "Reference" "C8"
-			(at 0 1.806 0)
+			(at 0 -1.68 180)
 			(layer "F.SilkS")
 			(uuid "491bdff6-ed68-4749-acd5-d07c9698c373")
 			(effects
@@ -437,8 +435,8 @@
 				)
 			)
 		)
-		(property "Value" "C"
-			(at 0 1.75 0)
+		(property "Value" "0.1uF"
+			(at 0 1.68 180)
 			(layer "F.Fab")
 			(uuid "e965d805-dcaf-4ad8-94e5-0f3611af1999")
 			(effects
@@ -449,38 +447,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "f339b2a5-9b70-4a23-bc33-841244c6ded4")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "32828f30-9418-404b-8b3c-f88321ec09eb")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 180)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "30ab461b-9b91-4cb5-9067-0fc659b1407e")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -488,6 +472,12 @@
 		(path "/a081480c-fa6d-47e2-9f97-82ea0a48b27c")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -533,7 +523,7 @@
 			(uuid "ae1ef51d-d0af-452d-a860-8dfecf6f7eda")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(uuid "e86fe388-e5e3-4424-a194-677fd1e10f8d")
 			(effects
@@ -574,7 +564,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:MountingHole_3.2mm_M3_Pad_Via"
+	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "07999176-5f71-4bea-8f8f-ca8e71530276")
 		(at 164.75 125.75)
@@ -583,7 +573,6 @@
 		(property "Reference" "MH2"
 			(at 0 -4.15 0)
 			(layer "F.SilkS")
-			(hide yes)
 			(uuid "f9d27a35-981e-412f-92da-8dd88ec58e70")
 			(effects
 				(font
@@ -611,7 +600,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -623,19 +611,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "mounting_hardware/mounting_hole"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "a918d343-5065-4f51-a9b8-f33ab46ff92a")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -643,6 +618,12 @@
 		(path "/4655634f-9b5d-455a-a496-8022ddb74700")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1")
+			)
+		)
 		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
@@ -805,7 +786,7 @@
 				)
 			)
 		)
-		(property "Value" "SW_Push - Down"
+		(property "Value" "SW_Push - Select"
 			(at 3.75 6.7 180)
 			(layer "F.Fab")
 			(uuid "33678fcf-7e25-4b87-8373-f8facce1fa49")
@@ -845,6 +826,12 @@
 		(path "/d7190a5e-29e0-485f-9dd0-63e1f5b4c56f")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -1136,7 +1123,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:C_0805_2012Metric"
+	(footprint "Capacitor_SMD:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "1a2642f3-e46f-478f-baf2-256f9800b3dd")
 		(at 164.5 83.5)
@@ -1153,8 +1140,8 @@
 				)
 			)
 		)
-		(property "Value" "C"
-			(at 4.4 0 0)
+		(property "Value" "100nF"
+			(at 0 1.68 0)
 			(layer "F.Fab")
 			(uuid "b0c56e74-11c2-4cb5-9c27-62003c75c757")
 			(effects
@@ -1172,7 +1159,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -1184,19 +1170,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "5e0302ee-2e00-4d59-969a-d8db13d5f181")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -1204,6 +1177,12 @@
 		(path "/b6b9a7a7-e8e8-420d-a7b8-8f0933221b7c")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -1249,7 +1228,7 @@
 			(uuid "de79e479-4e27-46e0-b058-8fc9bac56119")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 3 0.4 0)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "28f73435-2ee9-4cae-8252-43056ecf0728")
 			(effects
@@ -1290,14 +1269,14 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:R_0805_2012Metric"
+	(footprint "Resistor_SMD:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "215f902c-fa1a-4a4b-b5e4-94335a847163")
 		(at 188.75 105.25 -90)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
 		(property "Reference" "R13"
-			(at 0 -1.65 90)
+			(at 0 -1.65 270)
 			(layer "F.SilkS")
 			(uuid "bf136d24-6116-465a-ad07-149637e0332e")
 			(effects
@@ -1307,8 +1286,8 @@
 				)
 			)
 		)
-		(property "Value" "R"
-			(at 0 1.65 90)
+		(property "Value" "10R"
+			(at 0 1.65 270)
 			(layer "F.Fab")
 			(uuid "580ef155-7633-4743-a0a1-e122e9c539a6")
 			(effects
@@ -1319,38 +1298,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "95e5bce2-3ab1-439f-bd0c-6da60ddcd5db")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Resistor"
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "88b53548-280d-4be2-825c-6bdb135d35eb")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 270)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "18c0f206-3856-4c77-95c5-d2fec0872610")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -1358,6 +1323,12 @@
 		(path "/94b30bec-5015-487d-80bb-c5d5fe211fb3")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -1403,7 +1374,7 @@
 			(uuid "f1ce95ac-dac1-4e57-8a6d-bce269502a4d")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(uuid "7afd0eb0-fad1-4f90-9e0a-e0bec24c56c7")
 			(effects
@@ -1444,7 +1415,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:MountingHole_3.2mm_M3_Pad_Via"
+	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "22ddb3b1-2709-4f58-be41-4d0cc952ad44")
 		(at 164.75 60.75)
@@ -1453,7 +1424,6 @@
 		(property "Reference" "MH6"
 			(at 0 -4.15 0)
 			(layer "F.SilkS")
-			(hide yes)
 			(uuid "a8b9df67-1ee3-4152-814f-8de1892feeb0")
 			(effects
 				(font
@@ -1481,7 +1451,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -1493,19 +1462,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "mounting_hardware/mounting_hole"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "07ae3c73-b86a-469d-b67d-12e40465c0a2")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -1513,6 +1469,12 @@
 		(path "/e106590f-e545-47b6-90b2-df2f609d759f")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1")
+			)
+		)
 		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
@@ -1658,14 +1620,14 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Servo Tester:R_0805_2012Metric"
+	(footprint "Resistor_SMD:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "23981d4f-fae3-411d-9b42-b8f383361000")
 		(at 102.5375 63.15 180)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
 		(property "Reference" "R5"
-			(at 0 -1.65 0)
+			(at 0 -1.65 180)
 			(layer "F.SilkS")
 			(uuid "5c87081d-caff-4d68-a31e-5b28091fadd0")
 			(effects
@@ -1675,8 +1637,8 @@
 				)
 			)
 		)
-		(property "Value" "R"
-			(at 0 1.65 0)
+		(property "Value" "1K"
+			(at 0 1.65 180)
 			(layer "F.Fab")
 			(uuid "9ee10a2c-8141-4877-ba0e-3cf3bef5aa6d")
 			(effects
@@ -1687,38 +1649,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "8a5b1b98-f175-4c88-8a03-dedf46e0a876")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Resistor"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "a53398d2-e0dc-48f1-a30c-ff7d26b0ff1c")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 180)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "3c1a173b-4547-4cef-90dc-8a95ec2d28e5")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -1726,6 +1674,12 @@
 		(path "/ebf1dd3b-72b5-4f8d-85e8-5994b568c039")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -1771,7 +1725,7 @@
 			(uuid "165a5e0f-65c9-49b8-9024-b0664e79567d")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(uuid "009ab3c2-3314-42e0-9a04-42f1f644894a")
 			(effects
@@ -1812,7 +1766,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:R_0805_2012Metric"
+	(footprint "Resistor_SMD:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "29214879-bffa-4634-8d9a-545bfd9ad09f")
 		(at 182.7 87.1 90)
@@ -1829,7 +1783,7 @@
 				)
 			)
 		)
-		(property "Value" "R"
+		(property "Value" "4K7"
 			(at 0 1.65 90)
 			(layer "F.Fab")
 			(uuid "33e4c9cd-77f1-4ba3-94de-319fb459ece7")
@@ -1848,7 +1802,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -1860,19 +1813,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 90)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "3e9f1e73-4147-44ba-9066-aedb96478866")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -1880,6 +1820,12 @@
 		(path "/5603f07d-1885-4946-8464-4f44f1f41bb3")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -1966,7 +1912,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:MountingHole_3.2mm_M3_Pad_Via"
+	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "2c8d8aad-caac-4a09-9e0f-5197eef62242")
 		(at 219.75 60.75)
@@ -1975,7 +1921,6 @@
 		(property "Reference" "MH4"
 			(at 0 -4.15 0)
 			(layer "F.SilkS")
-			(hide yes)
 			(uuid "b01767c2-6b38-4e70-bc6f-fc561708a4e0")
 			(effects
 				(font
@@ -2003,7 +1948,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -2015,19 +1959,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "mounting_hardware/mounting_hole"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "9172002a-e9e0-4ec8-a6fe-04d903531693")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -2035,6 +1966,12 @@
 		(path "/d0fe2915-73d7-48c0-a1d7-a3dc4fa85d8a")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1")
+			)
+		)
 		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
@@ -2060,7 +1997,7 @@
 			(uuid "2400dc48-6e86-4e96-ab3c-644850ed7294")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 147.547056 0.947056 0)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "6e3d6d18-a93b-4a92-b08d-bc75d8dbe98c")
 			(effects
@@ -2180,14 +2117,14 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Servo Tester:LED_D3.0mm"
+	(footprint "LED_THT:LED_D3.0mm"
 		(layer "F.Cu")
 		(uuid "36b57994-6e14-4ee5-ba84-5de312da5cf5")
 		(at 165.77 111.25 180)
 		(descr "LED, diameter 3.0mm, 2 pins, generated by kicad-footprint-generator")
 		(tags "LED")
 		(property "Reference" "D3"
-			(at 1.27 -2.96 0)
+			(at 1.27 -2.96 180)
 			(layer "F.SilkS")
 			(uuid "6b157121-1312-4ccf-a376-ee6058e495c2")
 			(effects
@@ -2197,8 +2134,8 @@
 				)
 			)
 		)
-		(property "Value" "LED"
-			(at 1.27 2.96 0)
+		(property "Value" "ALERT"
+			(at 1.27 2.96 180)
 			(layer "F.Fab")
 			(uuid "c0729b24-c04a-425f-a2c2-6cb2b984bc0a")
 			(effects
@@ -2209,38 +2146,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "77f56f64-09c0-4c90-940e-e8e31746b353")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Light emitting diode"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "4afcfd0d-237f-474f-b9c5-98e3d4f93f22")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "LED/THT"
-			(at 0 0 180)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "7fa575d4-9dac-4a58-9161-b1e8ffcf233d")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -2249,7 +2172,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "130ae3be-953b-4723-bfe2-fabfcfb6ed69")
+			(uuid "97530552-5035-4e04-bd1b-ab7d8271242c")
 			(effects
 				(font
 					(size 1 1)
@@ -2261,6 +2184,12 @@
 		(path "/7962ee67-a14e-475b-bbf5-f832baa895e9")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -2371,7 +2300,7 @@
 			(uuid "022e56b8-3c69-4788-bbf6-ab22d6484765")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 1.27 0 0)
+			(at 1.27 0 180)
 			(layer "F.Fab")
 			(uuid "3af5772a-dc58-4e43-b27d-33b4403e90f7")
 			(effects
@@ -2422,7 +2351,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:R_0805_2012Metric"
+	(footprint "Resistor_SMD:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "4029969c-4bd7-4a32-a7d8-b6c0921d20a5")
 		(at 188.7 87.1 90)
@@ -2439,7 +2368,7 @@
 				)
 			)
 		)
-		(property "Value" "R"
+		(property "Value" "4K7"
 			(at 0 1.65 90)
 			(layer "F.Fab")
 			(uuid "c789842f-e9e7-4e07-b17c-d864e749a789")
@@ -2458,7 +2387,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -2470,19 +2398,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 90)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "4ad2db61-2ca1-47b3-a36f-e152d59472fe")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -2490,6 +2405,12 @@
 		(path "/2f80d0c7-15a1-447e-abac-b0d831a742aa")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -2576,14 +2497,14 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:R_0805_2012Metric"
+	(footprint "Resistor_SMD:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "40ad6455-1c46-42d7-9f9a-4f084006927e")
 		(at 158.5 78.5 180)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
 		(property "Reference" "R3"
-			(at 0 1.8 0)
+			(at 0 -1.65 180)
 			(layer "F.SilkS")
 			(uuid "e70fd80f-cfcd-4b4c-8b9e-961caf1f672c")
 			(effects
@@ -2593,8 +2514,8 @@
 				)
 			)
 		)
-		(property "Value" "R"
-			(at 3.2 0 0)
+		(property "Value" "0R"
+			(at 0 1.65 180)
 			(layer "F.Fab")
 			(uuid "8d9d9631-4afd-408a-b631-3e8802c530f4")
 			(effects
@@ -2605,38 +2526,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "4ee12409-a786-44f3-aec7-625acf82b8b2")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Resistor"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "aa6f11b1-ae2d-4703-9fd9-179cdd238972")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 180)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "82c35559-df8d-447f-8bb2-1edbf9a840ec")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -2644,6 +2551,12 @@
 		(path "/02635f69-61f2-4c4d-ae58-e78ae7e7474e")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -2689,7 +2602,7 @@
 			(uuid "45986eca-4a56-404f-9eca-df5983dac7f4")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 8.02 0.55 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(uuid "c3930732-8467-401e-981a-c06a45148a5d")
 			(effects
@@ -2787,6 +2700,12 @@
 		(path "/9fd5fc88-7ad4-4d09-878f-b5daf3c6ec69")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -3078,12 +2997,12 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:OLED_0.96_SPI_Module_1x07_P2.54mm"
+	(footprint "CodeWorks-Essentials:OLED_0.96_SPI_Module_1x07_P2.54mm"
 		(layer "F.Cu")
 		(uuid "468a2de2-7115-4a4e-89d3-5a3a9f985730")
 		(at 137.5 71.7)
 		(property "Reference" "OLED1"
-			(at 1.75 -1.45 0)
+			(at 0 -6.35 0)
 			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "19f93f56-2e78-413d-b683-6cc5109e5976")
@@ -3135,6 +3054,12 @@
 		(path "/3875d51d-f63d-471e-af93-d913f460f3ce")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2" "3" "4" "5" "6" "7")
+			)
+		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_rect
@@ -3171,7 +3096,7 @@
 			(uuid "87a0b2b3-eda0-4b77-a6e3-1b3822d3a9c5")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 3.75 -1.2 0)
+			(at 0 2.5 0)
 			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "aa052fe5-b353-4fa5-a571-b1e80f02a761")
@@ -3300,7 +3225,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:MountingHole_3.2mm_M3_Pad_Via"
+	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "57950c73-0c05-4927-85b1-8e030f024dd5")
 		(at 94.75 60.75)
@@ -3309,7 +3234,6 @@
 		(property "Reference" "MH5"
 			(at 0 -4.15 0)
 			(layer "F.SilkS")
-			(hide yes)
 			(uuid "cf262400-347e-4665-90a7-dba09968458b")
 			(effects
 				(font
@@ -3337,7 +3261,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -3349,19 +3272,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "mounting_hardware/mounting_hole"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "62278d32-7727-4a1d-8cc3-42e0947b8615")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -3369,6 +3279,12 @@
 		(path "/381dedad-7f69-4377-831b-41aae755e648")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1")
+			)
+		)
 		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
@@ -3514,7 +3430,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Servo Tester:TestPoint_Pad_D2.0mm"
+	(footprint "TestPoint:TestPoint_Pad_D2.0mm"
 		(layer "F.Cu")
 		(uuid "58a9d7e8-a519-4d98-8211-1d8b495ff83a")
 		(at 171.25 110.25)
@@ -3572,6 +3488,12 @@
 		(path "/183fa66b-9f18-4f49-a9d0-ce4949c00a0c")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1")
+			)
+		)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -3617,14 +3539,14 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Servo Tester:TestPoint_Pad_D2.0mm"
+	(footprint "TestPoint:TestPoint_Pad_D2.0mm"
 		(layer "F.Cu")
 		(uuid "5b02f6ad-7210-43bc-a2fc-34dd7c0ae389")
 		(at 182.7 82.5)
 		(descr "SMD pad as test Point, diameter 2.0mm")
 		(tags "test point SMD pad")
 		(property "Reference" "SDA1"
-			(at 0 -2.76 0)
+			(at 0 -1.998 0)
 			(layer "F.SilkS")
 			(uuid "28c2d1f1-1cc0-4ab0-91a3-23f600e5c739")
 			(effects
@@ -3675,6 +3597,12 @@
 		(path "/c2c78289-0f70-43da-a535-629f5459fb1c")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1")
+			)
+		)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -3720,7 +3648,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Servo Tester:Potentiometer_Bourns_PTV09A-1_Single_Vertical"
+	(footprint "CodeWorks-Potentiometers:Potentiometer_Bourns_PTV09A-1_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "5ed816fc-ba04-4ec7-9eac-dc43332f919a")
 		(at 135 110.75 -90)
@@ -3776,6 +3704,12 @@
 		(path "/57292856-9fcc-4dc9-93cd-85c5cbda42cf")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "3" "2")
+			)
+		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -3974,7 +3908,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:C_0805_2012Metric"
+	(footprint "Capacitor_SMD:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "6c7d5ef2-a57f-4715-a69b-e9855e2d767a")
 		(at 164.5 78.5)
@@ -3991,8 +3925,8 @@
 				)
 			)
 		)
-		(property "Value" "C"
-			(at 3.8 0 0)
+		(property "Value" "10uF"
+			(at 0 1.68 0)
 			(layer "F.Fab")
 			(uuid "890070df-8713-47c6-a024-046cf6634239")
 			(effects
@@ -4010,7 +3944,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -4022,19 +3955,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "714fe91e-9353-40cd-b7f5-96174f9443b7")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -4042,6 +3962,12 @@
 		(path "/f93621ba-8868-4250-8f98-1e2f2813209d")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -4087,7 +4013,7 @@
 			(uuid "5f7a48f7-62b9-466d-a49c-836cb1359f41")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0.05 0 0)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "b3009791-9439-46ab-bdeb-ba6f574a0bd5")
 			(effects
@@ -4128,7 +4054,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:SS12D10"
+	(footprint "CodeWorks-Slide_Switches:SS12D10"
 		(layer "F.Cu")
 		(uuid "6fd43453-c28f-4dbb-86e9-20b7faa80978")
 		(at 113.5 67.5)
@@ -4186,6 +4112,12 @@
 		(path "/46826885-d848-4ac9-9070-444f800e8f4c")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2" "3")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_rect
@@ -4271,7 +4203,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:R_1210_3225Metric"
+	(footprint "Resistor_SMD:R_1210_3225Metric"
 		(layer "F.Cu")
 		(uuid "717b9dae-9e7d-43f5-9bfc-e64a695fab31")
 		(at 192 110.5)
@@ -4288,7 +4220,7 @@
 				)
 			)
 		)
-		(property "Value" "R"
+		(property "Value" "0.1R"
 			(at 0 2.28 0)
 			(layer "F.Fab")
 			(uuid "e257e201-b89b-4a4b-bfb1-dec2da7f474f")
@@ -4307,7 +4239,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -4319,19 +4250,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "61b651d3-aebe-40c1-8d68-5b5d4078642f")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -4339,6 +4257,12 @@
 		(path "/95d352b5-7c9b-4886-892d-b163913de300")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -4425,7 +4349,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:MountingHole_3.2mm_M3_Pad_Via"
+	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "71ce79e7-0458-43b4-a37a-1d619f853358")
 		(at 94.75 125.75)
@@ -4434,7 +4358,6 @@
 		(property "Reference" "MH1"
 			(at 0 -4.15 0)
 			(layer "F.SilkS")
-			(hide yes)
 			(uuid "8a971d24-6134-4d71-99f7-cf11ce651538")
 			(effects
 				(font
@@ -4462,7 +4385,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -4474,19 +4396,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "mounting_hardware/mounting_hole"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "139d24c6-ebe3-43dc-b36f-bacca944e3a3")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -4494,6 +4403,12 @@
 		(path "/373a5836-234a-447d-b781-98aa69006ba3")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1")
+			)
+		)
 		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
@@ -4639,7 +4554,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Servo Tester:TestPoint_Pad_D2.0mm"
+	(footprint "TestPoint:TestPoint_Pad_D2.0mm"
 		(layer "F.Cu")
 		(uuid "75abbc63-d3bc-4699-8cb6-f489cc78abaf")
 		(at 157.75 98)
@@ -4697,6 +4612,12 @@
 		(path "/5c3152ca-c264-4f8e-a582-ac251c1cac68")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1")
+			)
+		)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -4742,14 +4663,14 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Servo Tester:R_0805_2012Metric"
+	(footprint "Resistor_SMD:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "78f4236d-a1fe-462e-8c68-604c9c5e85c3")
 		(at 195.75 105.25 -90)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
 		(property "Reference" "R12"
-			(at 0 -1.65 90)
+			(at 0 -1.65 270)
 			(layer "F.SilkS")
 			(uuid "7318696f-e4db-47cf-8761-db7f01d8c8a1")
 			(effects
@@ -4759,8 +4680,8 @@
 				)
 			)
 		)
-		(property "Value" "R"
-			(at 0 1.65 90)
+		(property "Value" "10R"
+			(at 0 1.65 270)
 			(layer "F.Fab")
 			(uuid "e37f3a62-904b-4979-9a9d-5f9807493dcd")
 			(effects
@@ -4771,38 +4692,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "77fb2f40-287b-447a-8526-990840ae810d")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Resistor"
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "24d48a7a-f7d5-4b5c-93c5-7d62857b5511")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 270)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "1fe63761-a682-4959-894f-bc828b227ee0")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -4810,6 +4717,12 @@
 		(path "/3fea589f-34ed-4bcc-92b0-c3eb4c9a34cd")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -4855,7 +4768,7 @@
 			(uuid "f6aae084-f974-430e-bea2-6e85c892371e")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(uuid "b3b78212-b283-4866-9509-94a03c973b90")
 			(effects
@@ -4896,7 +4809,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:TestPoint_Pad_D2.0mm"
+	(footprint "TestPoint:TestPoint_Pad_D2.0mm"
 		(layer "F.Cu")
 		(uuid "7e48a2ab-aaa3-42f8-950b-913940f2f828")
 		(at 147.5 90.9)
@@ -4954,6 +4867,12 @@
 		(path "/152188a6-247b-47a0-ab51-866d6de35576")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1")
+			)
+		)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -4999,14 +4918,14 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Servo Tester:C_0805_2012Metric"
+	(footprint "Capacitor_SMD:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "881fc6a7-ed99-42f0-aa53-d01e2bc27e31")
 		(at 190.75 93.5 -90)
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing)")
 		(tags "capacitor")
 		(property "Reference" "C5"
-			(at -2.75 0 180)
+			(at 0 -1.68 270)
 			(layer "F.SilkS")
 			(uuid "d1147554-25bf-493a-ae29-7f2398ebf9dc")
 			(effects
@@ -5016,8 +4935,8 @@
 				)
 			)
 		)
-		(property "Value" "C"
-			(at -0.25 -2.25 270)
+		(property "Value" "100nF"
+			(at 0 1.68 270)
 			(layer "F.Fab")
 			(uuid "00d65f48-3c58-4d1f-aa13-8936bbc32d99")
 			(effects
@@ -5028,38 +4947,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "4e59c18d-7da6-4646-95de-de3268735d92")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "dd39c59d-e11a-403a-a87b-48825c0550c9")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 270)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "786e51cb-cd9d-408a-a70a-8badaaaa9a37")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -5067,6 +4972,12 @@
 		(path "/5c6dbf85-9d0c-4760-9070-6209ea3a4516")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -5112,7 +5023,7 @@
 			(uuid "e3436d36-febd-4953-bd06-983d668198d9")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(uuid "3ae71847-4833-47e3-abd0-af1527c916d1")
 			(effects
@@ -5153,7 +5064,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:C_0805_2012Metric"
+	(footprint "Capacitor_SMD:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "8c22d573-ab10-4da6-aab5-d8d60da70d3f")
 		(at 164.5 93.5)
@@ -5170,8 +5081,8 @@
 				)
 			)
 		)
-		(property "Value" "C"
-			(at 4.2 -0.2 0)
+		(property "Value" "0.1uF"
+			(at 0 1.68 0)
 			(layer "F.Fab")
 			(uuid "d8ece7c5-953e-4709-882b-83d3b5017109")
 			(effects
@@ -5189,7 +5100,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -5201,19 +5111,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "8665e74a-14d0-4312-aa02-c456aeae2790")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -5221,6 +5118,12 @@
 		(path "/0c44326a-4539-46df-af2a-cb9d8ba56700")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -5307,7 +5210,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:Fuse_LittleFuseRUEF300"
+	(footprint "CodeWorks-Essentials:Fuse_LittleFuseRUEF300"
 		(layer "F.Cu")
 		(uuid "905ad992-1847-4a17-8c1a-f3d06f979814")
 		(at 99.158 86.392 180)
@@ -5359,22 +5262,16 @@
 				)
 			)
 		)
-		(property "KiLib_Generator" "fuse"
-			(at 0 0 180)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "9712975d-635a-41d9-9e11-a91ac97aabae")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property ki_fp_filters "*polyfuse* *PTC*")
 		(path "/bd563bab-db6c-4f33-81fb-c1908732518a")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -5523,14 +5420,14 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:TestPoint_Pad_D2.0mm"
+	(footprint "TestPoint:TestPoint_Pad_D2.0mm"
 		(layer "F.Cu")
 		(uuid "94398bf2-76d6-4977-b9fe-cd3f8c589543")
 		(at 188.7 82.5)
 		(descr "SMD pad as test Point, diameter 2.0mm")
 		(tags "test point SMD pad")
 		(property "Reference" "SCL1"
-			(at 0 -2.76 0)
+			(at 0 -1.998 0)
 			(layer "F.SilkS")
 			(uuid "d6f6547a-5a2f-4a16-80b1-001f38425fca")
 			(effects
@@ -5581,6 +5478,12 @@
 		(path "/0cef84ff-4aad-49a3-8ec0-8f69118cd0f9")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1")
+			)
+		)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -5626,26 +5529,25 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Servo Tester:PinHeader_1x03_P2.54mm_Horizontal"
+	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "9463b2ad-59b9-48d3-a748-c29e2a41a772")
 		(at 208.83 119.75 -90)
 		(descr "Through hole angled pin header, 1x03, 2.54mm pitch, 6mm pin length, single row")
 		(tags "Through hole angled pin header THT 1x03 2.54mm single row")
 		(property "Reference" "J3"
-			(at -3.25 2.33 180)
+			(at 4.385 -2.27 270)
 			(layer "F.SilkS")
 			(uuid "bd3f141e-d495-472c-9f54-41cb89ed6cfa")
 			(effects
 				(font
-					(size 2 2)
-					(thickness 0.4)
-					(bold yes)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
-		(property "Value" "Conn_01x03_Pin"
-			(at 4.385 7.35 90)
+		(property "Value" "Servo 3"
+			(at 4.385 7.35 270)
 			(layer "F.Fab")
 			(uuid "36a88fe5-28e1-4c1b-9480-177832795eac")
 			(effects
@@ -5656,38 +5558,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "ed18b667-566c-4b8c-9246-998147aeca19")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x03, script generated"
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "c8877d33-1ace-48c5-89f2-977f1ad8253b")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "connector/pin_header_socket"
-			(at 0 0 270)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "b8a5a664-3381-4fa5-8267-5abe1f0e7dec")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -5695,6 +5583,12 @@
 		(path "/2e5b2ff5-70ac-4f81-9fbc-0efb76a3171b")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2" "3")
+			)
+		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -6177,7 +6071,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:C_0805_2012Metric"
+	(footprint "Capacitor_SMD:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "959fa42c-ac33-40f4-992d-963935b64c4d")
 		(at 164.5 88.5)
@@ -6194,8 +6088,8 @@
 				)
 			)
 		)
-		(property "Value" "C"
-			(at 4 0 0)
+		(property "Value" "100nF"
+			(at 0 1.68 0)
 			(layer "F.Fab")
 			(uuid "a850759d-6b37-42b7-bbe9-1032ddecf656")
 			(effects
@@ -6213,7 +6107,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -6225,19 +6118,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "a578d117-6f18-49a0-b8ee-792433350d9d")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -6245,6 +6125,12 @@
 		(path "/31bf1c44-9d2c-4713-9fa7-72ab548b1371")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -6290,7 +6176,7 @@
 			(uuid "16609462-40fa-4d99-9aa3-b1dad17e8919")
 		)
 		(fp_text user "${REFERENCE}"
-			(at -8 2 0)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "08cd855d-1a7d-4a3b-a587-62e5e313539e")
 			(effects
@@ -6331,14 +6217,14 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:LED_D3.0mm"
+	(footprint "LED_THT:LED_D3.0mm"
 		(layer "F.Cu")
 		(uuid "a58f9052-c13d-4338-b137-373a49baf177")
 		(at 108.5 61.7 90)
 		(descr "LED, diameter 3.0mm, 2 pins, generated by kicad-footprint-generator")
 		(tags "LED")
 		(property "Reference" "D1"
-			(at 1.27 -2.96 180)
+			(at 1.27 -2.96 90)
 			(layer "F.SilkS")
 			(uuid "4190f36c-d10f-413a-835c-0230fb07c753")
 			(effects
@@ -6348,9 +6234,9 @@
 				)
 			)
 		)
-		(property "Value" "LED"
-			(at 4.45 -0.25 180)
-			(layer "F.SilkS")
+		(property "Value" "STD"
+			(at 1.27 2.96 90)
+			(layer "F.Fab")
 			(uuid "0b277518-1ff6-4ca9-87f5-041c387ce73a")
 			(effects
 				(font
@@ -6367,7 +6253,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -6379,19 +6264,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "LED/THT"
-			(at 0 0 90)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "939b71dc-7e47-4f2c-a307-8b758661446f")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -6400,7 +6272,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "93e70d81-cb7a-4b22-b01b-ce66ec93c2c8")
+			(uuid "8f773253-6803-469a-99ec-597de50b72eb")
 			(effects
 				(font
 					(size 1 1)
@@ -6412,6 +6284,12 @@
 		(path "/e600044c-2d75-4da1-a930-7bfc455a3eb9")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -6573,14 +6451,14 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:R_0805_2012Metric"
+	(footprint "Resistor_SMD:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "a60e1c3c-e7f2-4bb0-af08-6c612af3e842")
 		(at 209.5 105.25 -90)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
 		(property "Reference" "R14"
-			(at 0.25 -1.7125 90)
+			(at 0 -1.65 270)
 			(layer "F.SilkS")
 			(uuid "9876d8f9-9fcd-4f0f-a6d6-437591f74740")
 			(effects
@@ -6590,8 +6468,8 @@
 				)
 			)
 		)
-		(property "Value" "R"
-			(at 0.25 1.75 90)
+		(property "Value" "10R"
+			(at 0 1.65 270)
 			(layer "F.Fab")
 			(uuid "3884bb5c-7d51-4f59-97fe-65ba69534484")
 			(effects
@@ -6602,38 +6480,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "89f58bd2-c69e-4c16-8abe-83e141f585a2")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Resistor"
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "c01bf59b-8d6d-48e5-b23d-ce6930b8ae21")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 270)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "35931f42-5b76-4cf2-92a3-6468d5457d34")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -6641,6 +6505,12 @@
 		(path "/bcf53877-9102-43c5-aaf6-aa50ba6168f7")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -6686,7 +6556,7 @@
 			(uuid "876214bc-af8d-4684-b722-b016c04b1d88")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0.25 -1.5 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(uuid "5e0bfa43-7aef-4b8d-bd75-d7865cb38e6f")
 			(effects
@@ -6727,14 +6597,14 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:C_0805_2012Metric"
+	(footprint "Capacitor_SMD:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "a7bfdd84-d841-472f-8739-b244ba9ca574")
 		(at 178.25 101.75 180)
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing)")
 		(tags "capacitor")
 		(property "Reference" "C6"
-			(at 0 1.876 0)
+			(at 0 -1.68 180)
 			(layer "F.SilkS")
 			(uuid "9a5048d6-8d62-4a56-86dd-626d0e782249")
 			(effects
@@ -6744,8 +6614,8 @@
 				)
 			)
 		)
-		(property "Value" "C"
-			(at 0 1.68 0)
+		(property "Value" "0.1nF"
+			(at 0 1.68 180)
 			(layer "F.Fab")
 			(uuid "8d1db0f0-20f7-47a4-99a4-3cc6e9bd9b9c")
 			(effects
@@ -6756,38 +6626,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "08eb493e-2c53-4a42-9df2-d825dc3547aa")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "c768cb0c-a8df-4577-ba33-b2ac5d010458")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 180)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "e413e23a-1988-4f89-9122-313736b3cf48")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -6795,6 +6651,12 @@
 		(path "/a179e039-71a3-4eb1-853c-f21d37e73aac")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -6840,7 +6702,7 @@
 			(uuid "daaf70ad-c099-481b-a2ec-38b9e367cd2a")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(uuid "9a7b0ed3-89d3-4a3d-b5a7-d9d47096e0cb")
 			(effects
@@ -6881,7 +6743,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:R_1210_3225Metric"
+	(footprint "Resistor_SMD:R_1210_3225Metric"
 		(layer "F.Cu")
 		(uuid "ad1fe311-1c7a-4027-88ca-e2a0b7bdf4ee")
 		(at 206.25 110.5)
@@ -6898,7 +6760,7 @@
 				)
 			)
 		)
-		(property "Value" "R"
+		(property "Value" "0.1R"
 			(at 0 2.28 0)
 			(layer "F.Fab")
 			(uuid "5c8ffc3c-b7db-4293-8bd5-1cc2a2625545")
@@ -6917,7 +6779,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -6929,19 +6790,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "9b65e0d8-9748-4774-bdf5-ad6b49cd2d54")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -6949,6 +6797,12 @@
 		(path "/088b487d-ef0b-40eb-aa58-d600f9b175d8")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -7035,7 +6889,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:MountingHole_3.2mm_M3_Pad_Via"
+	(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
 		(layer "F.Cu")
 		(uuid "b17ae3d1-eeb2-4749-b280-d0fdb70e9023")
 		(at 219.75 125.75)
@@ -7044,7 +6898,6 @@
 		(property "Reference" "MH3"
 			(at 0 -4.15 0)
 			(layer "F.SilkS")
-			(hide yes)
 			(uuid "fd655668-6f32-4b37-b59b-bc8b2e65a7fe")
 			(effects
 				(font
@@ -7072,7 +6925,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -7084,19 +6936,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "mounting_hardware/mounting_hole"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "6f56844d-4cca-4cb5-86b7-da286c187881")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -7104,6 +6943,12 @@
 		(path "/5e9d2cc6-176b-42fd-a6f1-cb44cceb7a47")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1")
+			)
+		)
 		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
@@ -7249,7 +7094,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Servo Tester:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm"
+	(footprint "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm"
 		(layer "F.Cu")
 		(uuid "b4afc662-ffd8-4bd2-b91e-5a80aa574df9")
 		(at 199.5 94)
@@ -7307,6 +7152,12 @@
 		(path "/707f8f28-e63e-43a9-a553-a1adc91e8d78")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(zone_connect 1)
 		(attr exclude_from_bom allow_soldermask_bridges)
 		(duplicate_pad_numbers_are_jumpers no)
@@ -7519,14 +7370,14 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Servo Tester:LED_D3.0mm"
+	(footprint "LED_THT:LED_D3.0mm"
 		(layer "F.Cu")
 		(uuid "bc57e3af-4dc4-4d4d-91b9-078a6194441f")
 		(at 118.5 59.16 -90)
 		(descr "LED, diameter 3.0mm, 2 pins, generated by kicad-footprint-generator")
 		(tags "LED")
 		(property "Reference" "D2"
-			(at 1.27 -2.96 180)
+			(at 1.27 -2.96 270)
 			(layer "F.SilkS")
 			(uuid "2db6de1d-010d-45d0-aefb-1d7e1bceae5c")
 			(effects
@@ -7536,9 +7387,9 @@
 				)
 			)
 		)
-		(property "Value" "LED"
-			(at -1.91 0.25 180)
-			(layer "F.SilkS")
+		(property "Value" "HV"
+			(at 1.27 2.96 270)
+			(layer "F.Fab")
 			(uuid "cf2d7522-ddf5-4339-86bb-a11bf40ab92d")
 			(effects
 				(font
@@ -7548,38 +7399,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "ab04e137-45a5-49fe-8f05-1760edb0f675")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Light emitting diode"
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "e7b3b3d1-6f09-4ffa-9677-a9e1243bb5eb")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "LED/THT"
-			(at 0 0 270)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "88d3b962-19c9-4459-a0bb-e856c3ef3ea3")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -7588,7 +7425,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "ab395941-b147-4c2f-ad9d-8615dc5a415c")
+			(uuid "2ed4ceaf-a810-483e-b1f6-c6c8bbbc66f8")
 			(effects
 				(font
 					(size 1 1)
@@ -7600,6 +7437,12 @@
 		(path "/634c6b94-6330-4692-b8a1-7989c3296da0")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -7710,7 +7553,7 @@
 			(uuid "3c57cf1e-9a3c-4017-a24e-2f15cd3f5fdf")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 1.27 0 90)
+			(at 1.27 0 270)
 			(layer "F.Fab")
 			(uuid "ff0d0c8f-1b41-475e-90a1-16aa3f58a948")
 			(effects
@@ -7761,14 +7604,14 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:R_0805_2012Metric"
+	(footprint "Resistor_SMD:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "beb2a6b0-9180-407d-a153-c7cdb0cb010d")
 		(at 102.5375 58.5 180)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
 		(property "Reference" "R4"
-			(at 0 -1.65 0)
+			(at 0 -1.65 180)
 			(layer "F.SilkS")
 			(uuid "2261e32f-3989-48e8-9a5c-5679b239c737")
 			(effects
@@ -7778,8 +7621,8 @@
 				)
 			)
 		)
-		(property "Value" "R"
-			(at 0 1.65 0)
+		(property "Value" "1K"
+			(at 0 1.65 180)
 			(layer "F.Fab")
 			(uuid "6a7ce059-e347-4ea4-ab98-503fc7a9d925")
 			(effects
@@ -7790,38 +7633,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "347b8123-25a6-498b-9dba-d7d51a5e3a71")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Resistor"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "6bfbb1a4-a965-4bd2-b4d3-557fe186cb15")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 180)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "bcbb2f4b-4f0c-4a70-acf9-08b6555c5838")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -7829,6 +7658,12 @@
 		(path "/365de85c-6ef4-44e2-a921-791ab4147c7f")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -7874,7 +7709,7 @@
 			(uuid "c2aa6133-28b8-497d-b2c0-afb8f7d00e9a")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(uuid "facb562e-028a-438a-a009-2b35f1b99b7d")
 			(effects
@@ -7915,14 +7750,14 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm"
+	(footprint "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm"
 		(layer "F.Cu")
 		(uuid "c09b7635-9889-45ca-96fd-5af044d28b51")
 		(at 105.75 118 180)
 		(descr "SMD Solder Jumper, 1x1.5mm, rounded Pads, 0.3mm gap, open")
 		(tags "solder jumper open")
 		(property "Reference" "JP2"
-			(at 0 -2.336 0)
+			(at 0 -1.8 180)
 			(layer "F.SilkS")
 			(uuid "2d3111dd-1d9a-406f-988e-5bfa57ddf9b1")
 			(effects
@@ -7933,7 +7768,7 @@
 			)
 		)
 		(property "Value" "SolderJumper_2_Open"
-			(at 0 1.9 0)
+			(at 0 1.9 180)
 			(layer "F.Fab")
 			(uuid "e37728fd-4c05-4db1-93b9-82a24316ce86")
 			(effects
@@ -7973,6 +7808,12 @@
 		(path "/7ce389fd-8e33-4fd6-8eea-5e12e73465f3")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(zone_connect 1)
 		(attr exclude_from_bom allow_soldermask_bridges)
 		(duplicate_pad_numbers_are_jumpers no)
@@ -8185,26 +8026,25 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Servo Tester:PinHeader_1x03_P2.54mm_Horizontal"
+	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "c2946d15-e12a-43dc-a9a1-b7c783a05a16")
 		(at 194.79 119.75 -90)
 		(descr "Through hole angled pin header, 1x03, 2.54mm pitch, 6mm pin length, single row")
 		(tags "Through hole angled pin header THT 1x03 2.54mm single row")
 		(property "Reference" "J2"
-			(at -3.25 2.29 180)
+			(at 4.385 -2.27 270)
 			(layer "F.SilkS")
 			(uuid "59733ac7-4592-4d29-971f-30156dd2b0d0")
 			(effects
 				(font
-					(size 2 2)
-					(thickness 0.4)
-					(bold yes)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
-		(property "Value" "Conn_01x03_Pin"
-			(at 4.385 7.35 90)
+		(property "Value" "Servo 2"
+			(at 4.385 7.35 270)
 			(layer "F.Fab")
 			(uuid "1fa4069f-59c2-4900-a743-d93d5c35a854")
 			(effects
@@ -8215,38 +8055,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "61bb061b-3710-43c9-ac10-79d1c1ff333c")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x03, script generated"
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "17252318-3c10-4d23-85e2-9517bb9449a9")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "connector/pin_header_socket"
-			(at 0 0 270)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "14216730-d33b-42b1-a842-45df767cb589")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -8254,6 +8080,12 @@
 		(path "/020b58bd-21ee-44cb-b37a-48f113643bb2")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2" "3")
+			)
+		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -8736,7 +8568,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:R_1210_3225Metric"
+	(footprint "Resistor_SMD:R_1210_3225Metric"
 		(layer "F.Cu")
 		(uuid "cb565bbd-2689-476a-9071-c838d5c96cfb")
 		(at 178.25 110.5)
@@ -8753,7 +8585,7 @@
 				)
 			)
 		)
-		(property "Value" "R"
+		(property "Value" "0.1R"
 			(at 0 2.28 0)
 			(layer "F.Fab")
 			(uuid "3333d150-7ca2-44b3-bf7b-9366372ef6a3")
@@ -8772,7 +8604,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -8784,19 +8615,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "155de8aa-76ca-41bf-8782-33316b8b19b8")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -8804,6 +8622,12 @@
 		(path "/4f578300-2f5b-4dd7-96cf-7634a6fd33b2")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -8890,14 +8714,14 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:R_0805_2012Metric"
+	(footprint "Resistor_SMD:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "d571319f-7d5f-4587-805a-0f476694d102")
 		(at 203 105.25 -90)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
 		(property "Reference" "R15"
-			(at 0.25 -2 90)
+			(at 0 -1.65 270)
 			(layer "F.SilkS")
 			(uuid "cdb0db23-96b5-4171-b2e9-ace72aa0b63a")
 			(effects
@@ -8907,8 +8731,8 @@
 				)
 			)
 		)
-		(property "Value" "R"
-			(at 0 1.65 90)
+		(property "Value" "10R"
+			(at 0 1.65 270)
 			(layer "F.Fab")
 			(uuid "c6589e1a-5448-487d-9b83-15d107ea1e6f")
 			(effects
@@ -8919,38 +8743,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "e260bcae-0c9b-4ce7-a1f5-c5c9ee4a9181")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Resistor"
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "2775bbad-9a08-4875-9144-73a4eb4737f0")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 270)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "a13897a6-2e77-4fbe-95a0-bad5d426373a")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -8958,6 +8768,12 @@
 		(path "/9ab27ea4-68a4-4ad6-b08f-82b447674772")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -9003,7 +8819,7 @@
 			(uuid "2617540a-47fd-43f1-b88b-17c87ff653e7")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(uuid "ede61c8b-8b68-4f47-ad61-c39b9ab9b79d")
 			(effects
@@ -9061,7 +8877,7 @@
 				)
 			)
 		)
-		(property "Value" "SW_Push - Down"
+		(property "Value" "SW_Push - Up"
 			(at 3.75 6.7 180)
 			(layer "F.Fab")
 			(uuid "dd645391-0f95-4faf-a8a9-d8325475aea0")
@@ -9101,6 +8917,12 @@
 		(path "/30d13c6e-d920-40a6-8f2b-de50ad2f9911")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -9392,7 +9214,7 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:TestPoint_Pad_D2.0mm"
+	(footprint "TestPoint:TestPoint_Pad_D2.0mm"
 		(layer "F.Cu")
 		(uuid "e056b572-bb0d-4b9c-939a-b1517def0e0a")
 		(at 166.5 98.5)
@@ -9450,6 +9272,12 @@
 		(path "/5d5dec75-e5d4-4e96-9ae1-4c6f9dbf5235")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1")
+			)
+		)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -9495,7 +9323,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Servo Tester:R_0805_2012Metric"
+	(footprint "Resistor_SMD:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "e0fc9cbf-9fef-4d02-8ce6-aeea16e48139")
 		(at 158.5 88.5)
@@ -9512,8 +9340,8 @@
 				)
 			)
 		)
-		(property "Value" "R"
-			(at -3.2 0 0)
+		(property "Value" "47K"
+			(at 0 1.65 0)
 			(layer "F.Fab")
 			(uuid "a17a6ae8-9427-4499-b0f5-0d09d1e242e1")
 			(effects
@@ -9531,7 +9359,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -9543,19 +9370,6 @@
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "4a07d755-1d28-4c98-8762-b426cd0c2046")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -9563,6 +9377,12 @@
 		(path "/2dfe5bb2-c3b8-431a-bb97-718b2acae5cc")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -9649,12 +9469,12 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:Ultra Mini-360"
+	(footprint "CodeWorks-Essentials:Ultra Mini-360"
 		(layer "F.Cu")
 		(uuid "e3b5a9e7-ea42-41df-b763-54774affef00")
 		(at 96.825549 108.64292 -90)
 		(property "Reference" "U1"
-			(at 0 -1.5 270)
+			(at 0 -0.5 270)
 			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "1b6313e8-64b1-4afb-a363-c8b7e0c0e72d")
@@ -9666,7 +9486,7 @@
 			)
 		)
 		(property "Value" "Mini360"
-			(at 0 0 270)
+			(at 0 1 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "eb091b31-ab5f-4036-910d-033ff209f14a")
@@ -9706,6 +9526,12 @@
 		(path "/a587ab5b-520c-4bf8-a3f0-faa431b2aacc")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2" "3" "4")
+			)
+		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -9748,21 +9574,8 @@
 			(layer "F.SilkS")
 			(uuid "58850422-cba5-4d06-a855-085637871b24")
 		)
-		(fp_text user "Out +"
-			(at 1.65 5.1 270)
-			(unlocked yes)
-			(layer "F.SilkS")
-			(uuid "41e2f82b-e1de-4621-beac-497826331450")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.1)
-				)
-				(justify left bottom)
-			)
-		)
 		(fp_text user "In +"
-			(at -5.1 4.85 270)
+			(at -8.5 7.5 270)
 			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "420927bb-8770-4997-ba4b-16963f9c242e")
@@ -9774,8 +9587,21 @@
 				(justify left bottom)
 			)
 		)
+		(fp_text user "Out +"
+			(at 4.5 7.5 270)
+			(unlocked yes)
+			(layer "F.SilkS")
+			(uuid "41e2f82b-e1de-4621-beac-497826331450")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.1)
+				)
+				(justify left bottom)
+			)
+		)
 		(fp_text user "In -"
-			(at -4.85 -3.65 270)
+			(at -8.636 -6 270)
 			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "cbdf2df8-17f4-45d2-b6ce-af03e7ed407d")
@@ -9788,7 +9614,7 @@
 			)
 		)
 		(fp_text user "Out -"
-			(at 1.65 -3.9 270)
+			(at 4.5 -6 270)
 			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "e8301701-216c-48df-bd1f-9a225afb2538")
@@ -9801,7 +9627,7 @@
 			)
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 1.5 270)
+			(at 0 2.5 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "757b8963-6382-46d7-bb78-8cd5be04f212")
@@ -9903,14 +9729,14 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:R_0805_2012Metric"
+	(footprint "Resistor_SMD:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "e4fbc2f0-8418-444b-b51e-918d9b8a55a9")
 		(at 164.5 105 180)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
 		(property "Reference" "R6"
-			(at 0 -1.65 0)
+			(at 0 -1.65 180)
 			(layer "F.SilkS")
 			(uuid "da1a6554-b1e8-426a-9ff5-c666d24542e6")
 			(effects
@@ -9920,8 +9746,8 @@
 				)
 			)
 		)
-		(property "Value" "R"
-			(at 0 1.65 0)
+		(property "Value" "470R"
+			(at 0 1.65 180)
 			(layer "F.Fab")
 			(uuid "5454457a-37e4-42fd-9d3a-9087424cb981")
 			(effects
@@ -9932,38 +9758,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "bdb2b20d-e75b-4b00-acc5-9e46fd95d69e")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Resistor"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "756706e5-aa38-4f28-ab83-139749602752")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 180)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "dd2a92e3-bd7a-4a21-8bc5-ebcb85462589")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -9971,6 +9783,12 @@
 		(path "/e91a478b-77a6-4ce1-889a-cb6946f00c76")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -10016,7 +9834,7 @@
 			(uuid "d4839658-e33b-4bba-80c1-50f0d237a631")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(uuid "5230f7bb-63bb-4846-8341-fd937beaa2d1")
 			(effects
@@ -10057,14 +9875,14 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:R_0805_2012Metric"
+	(footprint "Resistor_SMD:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "e745fe9a-d468-4bdb-ae39-ca7cce510eb2")
 		(at 181.5 105.25 -90)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
 		(property "Reference" "R10"
-			(at 0 -1.65 90)
+			(at 0 -1.65 270)
 			(layer "F.SilkS")
 			(uuid "42ed728c-a14d-4bee-a2c4-3e072f983afe")
 			(effects
@@ -10074,8 +9892,8 @@
 				)
 			)
 		)
-		(property "Value" "R"
-			(at 0 1.65 90)
+		(property "Value" "10R"
+			(at 0 1.65 270)
 			(layer "F.Fab")
 			(uuid "38e29a5b-3ea1-43ad-9bca-0ab6b88a5887")
 			(effects
@@ -10086,38 +9904,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "436c87e4-1c39-4500-8110-b64261bdc77e")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Resistor"
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "3523cb5c-846c-441b-befe-423b627fea48")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 270)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "54ca7ec4-63d4-4f4a-a220-70b18889f538")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -10125,6 +9929,12 @@
 		(path "/e0743331-96b1-4d7e-b6c9-ee3eb4acc578")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -10170,7 +9980,7 @@
 			(uuid "11f48cc1-445d-4dc4-885c-da4e969699ba")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 3.25 0.78 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(uuid "0d13e7e0-81c9-4c71-ae35-e7e9108dfb6c")
 			(effects
@@ -10264,22 +10074,18 @@
 				)
 			)
 		)
-		(property "KiLib_Generator" "package/no_lead"
-			(at 0 0 180)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "eded50df-bf07-44ef-a82b-af69a8216059")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property ki_fp_filters "Texas*RGV0016A*")
 		(path "/c6aa6ca1-e97d-4342-962b-13ee1bbe2615")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "12" "11" "15" "14" "2" "1" "4" "3" "16" "17" "10" "9" "8" "13"
+					"7" "6" "5"
+				)
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -10809,14 +10615,14 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:C_0805_2012Metric"
+	(footprint "Capacitor_SMD:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "e968fcb4-c0bb-496f-9623-81c097ffa10d")
 		(at 192.25 101.75 180)
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing)")
 		(tags "capacitor")
 		(property "Reference" "C7"
-			(at 0 1.876 0)
+			(at 0 -1.68 180)
 			(layer "F.SilkS")
 			(uuid "0a604a39-ca7d-4375-9dd6-8747484c4b5c")
 			(effects
@@ -10826,8 +10632,8 @@
 				)
 			)
 		)
-		(property "Value" "C"
-			(at 0 1.68 0)
+		(property "Value" "0.1uF"
+			(at 0 1.68 180)
 			(layer "F.Fab")
 			(uuid "2bcbcc0a-6152-46dc-884b-31ce49044dfa")
 			(effects
@@ -10838,38 +10644,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "9cf003c8-fb7a-4148-a3c2-900fc06395de")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "49809f57-4104-4710-ac7a-971b48595ce9")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 180)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "e8212b0a-5d3b-4ee0-a881-1427d6c8b8cb")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -10877,6 +10669,12 @@
 		(path "/b11c1556-f10d-4adf-8c5f-8655b6af563c")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -10922,7 +10720,7 @@
 			(uuid "beb25e5c-dcb1-4e6e-a2f1-1c88765f7194")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(uuid "8270da32-e6d0-4f2a-aa44-82406345a444")
 			(effects
@@ -10963,14 +10761,14 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:R_0805_2012Metric"
+	(footprint "Resistor_SMD:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "f97e0120-5af4-4bac-8136-1163b0edebfd")
 		(at 158.5 93.5 180)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
 		(property "Reference" "R9"
-			(at -0.2 1.6 0)
+			(at 0 -1.65 180)
 			(layer "F.SilkS")
 			(uuid "52cd16bd-8f92-4bf7-ac32-e71e807a932e")
 			(effects
@@ -10980,8 +10778,8 @@
 				)
 			)
 		)
-		(property "Value" "R"
-			(at 4 -0.2 0)
+		(property "Value" "330R"
+			(at 0 1.65 180)
 			(layer "F.Fab")
 			(uuid "6de6a72a-a355-4a0c-b607-92d8f80df5a6")
 			(effects
@@ -10992,38 +10790,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "b1ee7cc1-4dad-4869-9f41-200ed5266ea3")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Resistor"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "a982aabd-9de0-4927-be0a-a9c3962e1465")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 180)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "517e6022-2943-4b56-a5d8-ff0df167315d")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -11031,6 +10815,12 @@
 		(path "/07ebce99-1f43-4a0d-a799-6a6973ae2646")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -11076,7 +10866,7 @@
 			(uuid "f2c83315-ed9c-4ffe-82fe-ea0ccd793bd3")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(uuid "a8464fb6-8a1d-4810-a545-6c486c413a0e")
 			(effects
@@ -11117,26 +10907,25 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:PinHeader_1x03_P2.54mm_Horizontal"
+	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "fb7dfcc0-12bc-463d-917e-d1c1cebc18c6")
 		(at 180.75 119.75 -90)
 		(descr "Through hole angled pin header, 1x03, 2.54mm pitch, 6mm pin length, single row")
 		(tags "Through hole angled pin header THT 1x03 2.54mm single row")
 		(property "Reference" "J1"
-			(at -3.25 2.5 180)
+			(at 4.385 -2.27 270)
 			(layer "F.SilkS")
 			(uuid "2bde1d56-5199-45a4-91d1-d00b5279d911")
 			(effects
 				(font
-					(size 2 2)
-					(thickness 0.4)
-					(bold yes)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
-		(property "Value" "Conn_01x03_Pin"
-			(at 4.385 7.35 90)
+		(property "Value" "Servo 1"
+			(at 4.385 7.35 270)
 			(layer "F.Fab")
 			(uuid "500c1614-e4b1-4374-8d0a-d0c216f78647")
 			(effects
@@ -11147,38 +10936,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "369bf7c9-b816-4970-bb09-b72d87723263")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x03, script generated"
-			(at 0 0 90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "fb90364e-72f4-4c98-9a46-0466bb6bc066")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "connector/pin_header_socket"
-			(at 0 0 270)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "7c1d3c89-4252-453d-af89-32ae32b90b8c")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -11186,6 +10961,12 @@
 		(path "/a93a99ae-429e-49b6-8d92-fe4ef0b1b0ea")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2" "3")
+			)
+		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -11668,14 +11449,14 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:R_0805_2012Metric"
+	(footprint "Resistor_SMD:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "fe203909-f8e8-4c00-b2a0-5fb3b6d42637")
 		(at 158.5 83.5 180)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
 		(property "Reference" "R2"
-			(at 0 1.6 0)
+			(at 0 -1.65 180)
 			(layer "F.SilkS")
 			(uuid "a9959d1b-f411-46d7-9531-60b4b040f664")
 			(effects
@@ -11685,8 +11466,8 @@
 				)
 			)
 		)
-		(property "Value" "R"
-			(at 3.4 0 0)
+		(property "Value" "27K"
+			(at 0 1.65 180)
 			(layer "F.Fab")
 			(uuid "49ecf394-622d-4565-981b-a7b17c471852")
 			(effects
@@ -11697,38 +11478,24 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "d28b9fdc-76ed-4c1e-a003-b28df60a3c6f")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Resistor"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "e7b90448-a327-4f33-849b-844d93935d93")
 			(effects
 				(font
 					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "KiLib_Generator" "SMD_2terminal_chip_molded"
-			(at 0 0 180)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "786266f7-243d-48f7-ab34-0957d46889b8")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -11736,6 +11503,12 @@
 		(path "/c41982d6-ce64-4e30-af81-ae17f5d82607")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -11781,7 +11554,7 @@
 			(uuid "9bd2cf64-85b5-440c-8fd8-cf6263acea1c")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 0 180)
 			(layer "F.Fab")
 			(uuid "a1c69ef6-cfc6-41b7-a2a6-6635e1df4317")
 			(effects
@@ -11822,14 +11595,14 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:AMASS_XT60PW-M_1x02_P7.20mm_Horizontal"
+	(footprint "CodeWorks-Connectors:AMASS_XT60PW-M_1x02_P7.20mm_Horizontal"
 		(layer "B.Cu")
 		(uuid "7961c1ec-5068-497a-8297-65900c2808da")
 		(at 209.32 87.948 90)
 		(descr "Connector XT60 Horizontal PCB Female, https://www.tme.eu/Document/b13629717d44ae038681dba08d18c0b6/XT60PW-M.pdf")
 		(tags "RC Connector XT60")
 		(property "Reference" "J4"
-			(at 1.902 8.192 270)
+			(at 3.6 17.5 270)
 			(layer "B.SilkS")
 			(uuid "25b0afcb-f644-40ef-848f-1883c950c1ec")
 			(effects
@@ -11885,7 +11658,7 @@
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "f0fd4e67-e40f-4cbf-9124-86e1411ead65")
+			(uuid "d0c711bc-43c7-4b2f-880d-d12d2d3ff9dd")
 			(effects
 				(font
 					(size 1 1)
@@ -11899,7 +11672,7 @@
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "52c692e4-23cf-460e-81f0-4fca6f5e5ae8")
+			(uuid "268df52e-9b8f-4377-9587-264011a84d4c")
 			(effects
 				(font
 					(size 1 1)
@@ -11913,7 +11686,7 @@
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "d12d8588-9fdb-4119-a678-adb351e113c8")
+			(uuid "aac81077-7d72-4914-8de0-545ed8a4d642")
 			(effects
 				(font
 					(size 1 1)
@@ -11927,7 +11700,7 @@
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "151feb45-df77-465a-963d-2b375656d567")
+			(uuid "1b604468-289b-4fb8-9ffc-beff3a1067c7")
 			(effects
 				(font
 					(size 1 1)
@@ -11941,7 +11714,7 @@
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "0345e305-cc29-41fc-95fc-b6301a906add")
+			(uuid "af807cc1-81c0-44f9-ab80-4a3fd60e13ac")
 			(effects
 				(font
 					(size 1 1)
@@ -11955,7 +11728,7 @@
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "10157604-8e79-4858-9b19-101ac5294675")
+			(uuid "090e0db7-2b21-45c7-a638-e880db0aade8")
 			(effects
 				(font
 					(size 1 1)
@@ -11969,7 +11742,7 @@
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "8526ba7a-bf99-4441-874a-09457f49d9c2")
+			(uuid "5912264b-43b7-4503-abb6-bad533c93411")
 			(effects
 				(font
 					(size 1 1)
@@ -11983,7 +11756,7 @@
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "e5a14a95-c37f-4d57-9714-5c715cea416c")
+			(uuid "6b7e0277-d2db-48a0-bb98-f9e5a8be31ce")
 			(effects
 				(font
 					(size 1 1)
@@ -11997,7 +11770,7 @@
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "5b9c30ed-e6ca-47b0-81fa-f03971053809")
+			(uuid "006358cb-c167-49e4-984d-49180997e112")
 			(effects
 				(font
 					(size 1 1)
@@ -12011,7 +11784,7 @@
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "a6151f07-52ba-4d86-859c-a2fc27d2675d")
+			(uuid "9c28b35a-acfa-4f36-9f99-5be63ec77120")
 			(effects
 				(font
 					(size 1 1)
@@ -12025,7 +11798,7 @@
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "0581fb2e-5229-4ffd-83f8-aaaedfbff8da")
+			(uuid "97366f0e-afd4-4bf2-9e08-42f608406956")
 			(effects
 				(font
 					(size 1 1)
@@ -12039,7 +11812,7 @@
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "6a8b8514-6adb-4ca2-bc58-b3d646103ac2")
+			(uuid "c57348fd-068d-4949-905f-8ea0d06263d6")
 			(effects
 				(font
 					(size 1 1)
@@ -12053,7 +11826,7 @@
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "1051730b-c13b-4e08-a72d-8d929e89c1c8")
+			(uuid "b66b4439-4b06-4753-9da4-6f206babd192")
 			(effects
 				(font
 					(size 1 1)
@@ -12065,6 +11838,12 @@
 		(path "/8b0f60a0-01a1-4323-a58d-33bca61c7a28")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2" "SH1" "SH2")
+			)
+		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -12545,6 +12324,12 @@
 		(path "/e4385a9f-ac9a-47fe-bf75-41af0e4f05cf")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1+" "2+" "1-" "2-")
+			)
+		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -12812,13 +12597,13 @@
 			)
 		)
 	)
-	(footprint "Servo Tester:Clone_Pro_Mini_Socket_No_PROG"
+	(footprint "CodeWorks-Essentials:Clone_Pro_Mini_Socket_No_PROG"
 		(layer "B.Cu")
 		(uuid "a691e501-6fc7-44e1-9efd-7d0c3fca386e")
 		(at 113.57 91.28)
 		(descr "https://www.addicore.com/Pro-Mini-p/ad249.htm")
 		(property "Reference" "A1"
-			(at -0.32 11.72 180)
+			(at -6.858 17.526 180)
 			(layer "B.SilkS")
 			(uuid "4e32d527-6769-4076-b18d-4b6180af1a24")
 			(effects
@@ -12871,6 +12656,15 @@
 		(path "/466c07c5-bf5a-4c17-869a-d215b1d262be")
 		(sheetname "/")
 		(sheetfile "Servo Tester.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "D0" "D1" "A7" "A6" "A5" "A4" "A3" "A2" "A1" "A0" "RAW" "Vcc1"
+					"GND1" "GND2" "GND3" "RST1" "RST2" "D2" "D3" "D4" "D5" "D6" "D7" "D8"
+					"D9" "D10" "D11" "D12" "D13" "DTR" "TXO" "RXI" "Vcc2" "GND4" "GND5"
+				)
+			)
+		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -13134,7 +12928,7 @@
 			(uuid "42763636-a0dd-4f5d-9e9a-52bc8b38adff")
 		)
 		(fp_text user "D0"
-			(at -0.07 0.47 0)
+			(at -5.715 10.16 270)
 			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "56ade521-eec9-4c5f-ab1b-dd80e1de8c06")

@@ -6,6 +6,31 @@
 #include "display_ui.h"
 #include "settings_store.h"
 
+namespace
+{
+void debugSerialBegin()
+{
+  const uint16_t ubrr = static_cast<uint16_t>((F_CPU / 8UL / Config::SERIAL_DEBUG_BAUD) - 1UL);
+  UCSR0A = _BV(U2X0);
+  UBRR0H = static_cast<uint8_t>(ubrr >> 8);
+  UBRR0L = static_cast<uint8_t>(ubrr);
+  UCSR0B = _BV(TXEN0);
+  UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
+}
+
+void debugSerialWrite(const char *text)
+{
+  while (*text != '\0')
+  {
+    while ((UCSR0A & _BV(UDRE0)) == 0)
+    {
+    }
+    UDR0 = static_cast<uint8_t>(*text);
+    ++text;
+  }
+}
+} // namespace
+
 const char *AppController::modeLabel() const
 {
   // Short labels are used in the OLED header.
@@ -152,7 +177,8 @@ void AppController::drawUi()
           hvMode_,
           modeLabel(),
           controlMode_ == CONTROL_SWEEP,
-          sweepCycleCounter_);
+          sweepCycleCounter_,
+          savedSettings_.burnCycles);
     }
     else if (statusScreen_ == SCREEN_GAUGE)
     {
@@ -217,7 +243,8 @@ void AppController::drawUi()
       editSettings_.minPulseUs,
       editSettings_.maxPulseUs,
       editSettings_.reverse,
-      editSettings_.sweepCycleMs);
+      editSettings_.sweepCycleMs,
+      editSettings_.burnCycles);
 }
 
 void AppController::cycleStatusScreen()
@@ -233,6 +260,7 @@ void AppController::resetSweepState()
   sweepDirection_ = 1;
   sweepCycleCounter_ = 0;
   sweepReachedMax_ = false;
+  sweepBurnDone_ = false;
   lastSweepStepMs_ = millis();
 }
 
@@ -256,6 +284,7 @@ void AppController::cycleControlMode(const int8_t direction)
     // Counter is mode-local, reset when leaving/entering modes.
     sweepCycleCounter_ = 0;
     sweepReachedMax_ = false;
+    sweepBurnDone_ = false;
   }
 
   if (controlMode_ == CONTROL_SWEEP)
@@ -348,6 +377,27 @@ void AppController::adjustCurrentSetting(const int16_t delta)
     }
 
     editSettings_.sweepCycleMs = static_cast<uint16_t>(candidate);
+    return;
+  }
+
+  if (selectedMenuItem_ == MENU_BURN_CYCLES)
+  {
+    const long stepCycles = (delta > 0)
+                                ? static_cast<long>(Config::BURN_CYCLES_STEP)
+                                : -static_cast<long>(Config::BURN_CYCLES_STEP);
+    long candidate = static_cast<long>(editSettings_.burnCycles) + stepCycles;
+
+    if (candidate < Config::BURN_CYCLES_MIN)
+    {
+      candidate = Config::BURN_CYCLES_MIN;
+    }
+
+    if (candidate > Config::BURN_CYCLES_MAX)
+    {
+      candidate = Config::BURN_CYCLES_MAX;
+    }
+
+    editSettings_.burnCycles = static_cast<uint16_t>(candidate);
   }
 }
 
@@ -378,6 +428,14 @@ void AppController::updateServoOutput(const unsigned long nowMs)
   }
   else
   {
+    if (sweepBurnDone_)
+    {
+      currentPulseUs_ = static_cast<uint16_t>((savedSettings_.minPulseUs + savedSettings_.maxPulseUs) / 2);
+      servoOutput_.writeMicroseconds(currentPulseUs_);
+      stabilizeDisplayPulseUs(currentPulseUs_, savedSettings_);
+      return;
+    }
+
     if (sweepPulseUs_ < savedSettings_.minPulseUs)
     {
       sweepPulseUs_ = savedSettings_.minPulseUs;
@@ -415,6 +473,10 @@ void AppController::updateServoOutput(const unsigned long nowMs)
         {
           // Count one completed round-trip after MAX was reached.
           ++sweepCycleCounter_;
+          if (savedSettings_.burnCycles > 0 && sweepCycleCounter_ >= savedSettings_.burnCycles)
+          {
+            sweepBurnDone_ = true;
+          }
         }
         sweepReachedMax_ = false;
       }
@@ -448,12 +510,30 @@ void AppController::updateAlertLed() const
     return;
   }
 
-  const bool alertActive = inaMonitor_.ready() &&
+  const bool alertActive = Config::ALERT_LED_FORCE_ON ||
+                           (inaMonitor_.ready() &&
                            (inaMonitor_.warnCh1() || inaMonitor_.warnCh2() || inaMonitor_.warnCh3() ||
-                            inaMonitor_.critCh1() || inaMonitor_.critCh2() || inaMonitor_.critCh3());
+                            inaMonitor_.critCh1() || inaMonitor_.critCh2() || inaMonitor_.critCh3()));
 
   const bool pinLevel = Config::ALERT_LED_ACTIVE_HIGH ? alertActive : !alertActive;
   digitalWrite(Config::ALERT_LED_PIN, pinLevel ? HIGH : LOW);
+}
+
+void AppController::updatePowerModeLeds() const
+{
+  const bool stdOn = !hvMode_;
+  const bool hvOn = Config::HV_MODE_LED_FORCE_ON || hvMode_;
+  const bool stdLevel = Config::POWER_MODE_LED_ACTIVE_HIGH ? stdOn : !stdOn;
+  const bool hvLevel = Config::POWER_MODE_LED_ACTIVE_HIGH ? hvOn : !hvOn;
+
+  if (Config::STD_MODE_LED_PIN != 255)
+  {
+    digitalWrite(Config::STD_MODE_LED_PIN, stdLevel ? HIGH : LOW);
+  }
+  if (Config::HV_MODE_LED_PIN != 255)
+  {
+    digitalWrite(Config::HV_MODE_LED_PIN, hvLevel ? HIGH : LOW);
+  }
 }
 
 void AppController::handleUiInput(const bool upPressed, const bool downPressed, const bool selectShortPress, const bool selectLongPress)
@@ -547,6 +627,11 @@ void AppController::handleUiInput(const bool upPressed, const bool downPressed, 
 
 void AppController::begin()
 {
+  if (Config::SERIAL_DEBUG_ENABLED)
+  {
+    debugSerialBegin();
+  }
+
   // Load validated settings and initialize runtime defaults.
   savedSettings_ = SettingsStore::load();
   currentPulseUs_ = savedSettings_.minPulseUs;
@@ -579,6 +664,45 @@ void AppController::begin()
     const bool idleLevel = Config::ALERT_LED_ACTIVE_HIGH ? false : true;
     digitalWrite(Config::ALERT_LED_PIN, idleLevel ? HIGH : LOW);
   }
+  if (Config::STD_MODE_LED_PIN != 255)
+  {
+    pinMode(Config::STD_MODE_LED_PIN, OUTPUT);
+    digitalWrite(Config::STD_MODE_LED_PIN, Config::POWER_MODE_LED_ACTIVE_HIGH ? LOW : HIGH);
+  }
+  if (Config::HV_MODE_LED_PIN != 255)
+  {
+    pinMode(Config::HV_MODE_LED_PIN, OUTPUT);
+    digitalWrite(Config::HV_MODE_LED_PIN, Config::POWER_MODE_LED_ACTIVE_HIGH ? LOW : HIGH);
+  }
+
+  if (Config::LED_STARTUP_TEST_MS > 0)
+  {
+    if (Config::ALERT_LED_PIN != 255)
+    {
+      digitalWrite(Config::ALERT_LED_PIN, Config::ALERT_LED_ACTIVE_HIGH ? HIGH : LOW);
+    }
+    if (Config::STD_MODE_LED_PIN != 255)
+    {
+      digitalWrite(Config::STD_MODE_LED_PIN, Config::POWER_MODE_LED_ACTIVE_HIGH ? HIGH : LOW);
+    }
+    if (Config::HV_MODE_LED_PIN != 255)
+    {
+      digitalWrite(Config::HV_MODE_LED_PIN, Config::POWER_MODE_LED_ACTIVE_HIGH ? HIGH : LOW);
+    }
+    delay(Config::LED_STARTUP_TEST_MS);
+    if (Config::ALERT_LED_PIN != 255)
+    {
+      digitalWrite(Config::ALERT_LED_PIN, Config::ALERT_LED_ACTIVE_HIGH ? LOW : HIGH);
+    }
+    if (Config::STD_MODE_LED_PIN != 255)
+    {
+      digitalWrite(Config::STD_MODE_LED_PIN, Config::POWER_MODE_LED_ACTIVE_HIGH ? LOW : HIGH);
+    }
+    if (Config::HV_MODE_LED_PIN != 255)
+    {
+      digitalWrite(Config::HV_MODE_LED_PIN, Config::POWER_MODE_LED_ACTIVE_HIGH ? LOW : HIGH);
+    }
+  }
 
   if (Config::MODE_SWITCH_PIN != 255)
   {
@@ -586,6 +710,11 @@ void AppController::begin()
   }
 
   inaMonitor_.begin(Wire);
+  if (Config::SERIAL_DEBUG_ENABLED)
+  {
+    debugSerialWrite(inaMonitor_.ready() ? "INA3221 OK\r\n" : "INA3221 NOT FOUND\r\n");
+  }
+
   // Short startup delay to let peripherals stabilize visually/electrically.
   delay(600);
 }
@@ -619,6 +748,7 @@ void AppController::update()
   updateServoOutput(nowMs);
   inaMonitor_.update(nowMs);
   updateAlertLed();
+  updatePowerModeLeds();
   handleUiInput(upPressed, downPressed, selectShortPress, selectLongPress);
 
   if ((nowMs - lastUiDrawMs_) >= Config::UI_REFRESH_MS || upPressed || downPressed || selectShortPress || selectLongPress)

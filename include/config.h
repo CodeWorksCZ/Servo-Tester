@@ -3,6 +3,11 @@
 
 #include <Arduino.h>
 
+// Compile-time UI language selection. Only the selected language is compiled in.
+#define SERVO_TESTER_LANG_EN 0
+#define SERVO_TESTER_LANG_CZ 1
+#define SERVO_TESTER_LANGUAGE SERVO_TESTER_LANG_EN
+
 namespace Config
 {
 // Centralized compile-time configuration.
@@ -32,11 +37,22 @@ constexpr uint8_t BTN_SELECT_PIN = 5;
 // Optional alert LED output. Set to 255 to disable.
 constexpr uint8_t ALERT_LED_PIN = 4;
 constexpr bool ALERT_LED_ACTIVE_HIGH = true;
+constexpr bool ALERT_LED_FORCE_ON = false;
+// Optional power mode indicator LEDs. Set pin to 255 to disable.
+constexpr uint8_t STD_MODE_LED_PIN = 7;
+constexpr uint8_t HV_MODE_LED_PIN = 8;
+constexpr bool POWER_MODE_LED_ACTIVE_HIGH = true;
+constexpr bool HV_MODE_LED_FORCE_ON = false;
+constexpr uint16_t LED_STARTUP_TEST_MS = 500;
 // External STD/HV mode switch input (to GND or VCC).
 // Set MODE_SWITCH_PIN to 255 to disable and use ADC voltage detection.
 constexpr uint8_t MODE_SWITCH_PIN = 255;
 constexpr bool MODE_SWITCH_ACTIVE_LOW = true;
 constexpr bool MODE_SWITCH_USE_PULLUP = true;
+
+// Serial debug output for INA3221 communication checks.
+constexpr bool SERIAL_DEBUG_ENABLED = true;
+constexpr uint32_t SERIAL_DEBUG_BAUD = 115200;
 
 // UI refresh rate and button debounce
 constexpr uint16_t UI_REFRESH_MS = 80;       // OLED redraw period.
@@ -83,9 +99,13 @@ constexpr uint16_t SWEEP_CYCLE_MIN_MS = 500;
 constexpr uint16_t SWEEP_CYCLE_MAX_MS = 10000;
 constexpr uint16_t SWEEP_CYCLE_DEFAULT_MS = 3000;
 constexpr uint16_t SWEEP_CYCLE_STEP_MS = 500;
+constexpr uint16_t BURN_CYCLES_MIN = 0;
+constexpr uint16_t BURN_CYCLES_MAX = 9999;
+constexpr uint16_t BURN_CYCLES_DEFAULT = 0;
+constexpr uint16_t BURN_CYCLES_STEP = 100;
 
 // EEPROM storage layout/version
-constexpr uint8_t SETTINGS_VERSION = 3;
+constexpr uint8_t SETTINGS_VERSION = 4;
 constexpr int EEPROM_ADDR = 0; // Base EEPROM address for Settings struct.
 } // namespace Config
 

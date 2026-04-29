@@ -7,6 +7,8 @@ Connected pins (current config)
 - D4: Alert LED - OK
 - D5: Button SELECT 0 -OK
 - D6: Servo signal (PWM) - OK
+- D7: STD mode LED - OK
+- D8: HV mode LED - OK
 - D9: OLED CLK (software SPI)
 - D10: OLED MOSI (software SPI)
 - D11: OLED RESET
@@ -16,7 +18,6 @@ Connected pins (current config)
 - A1: Servo rail voltage sensing (ADC divider) - OK
 - A4: I2C SDA (INA3221) - OK
 - A5: I2C SCL (INA3221) - OK
-- D7: Not used in current config (reserved for optional STD/HV switch)
 
 Digital pins
 - D0 (RX): UART RX (USB-Serial programming/debug), not assigned to project I/O.
@@ -26,8 +27,8 @@ Digital pins
 - D4: ALERT_LED_PIN (optional warning/critical LED, active level configurable in config).
 - D5: BTN_SELECT_PIN (button SELECT, short press = next screen, long press = settings).
 - D6: SERVO_PIN (servo signal output, PWM/timer driven by Servo library).
-- D7: Free (mode switch pin disabled in config, MODE_SWITCH_PIN = 255).
-- D8: Free.
+- D7: STD_MODE_LED_PIN (STD servo rail indicator).
+- D8: HV_MODE_LED_PIN (HV servo rail indicator).
 - D9: OLED_CLK (SSD1306 software SPI, display CLK/D0).
 - D10: OLED_MOSI (SSD1306 software SPI, display DIN/D1).
 - D11: OLED_RESET (SSD1306 reset).

@@ -45,6 +45,8 @@ User manual: `MANUAL.md`
 - `D3`: `BTN_DOWN_PIN`
 - `D5`: `BTN_SELECT_PIN`
 - `D6`: `SERVO_PIN`
+- `D7`: `STD_MODE_LED_PIN`
+- `D8`: `HV_MODE_LED_PIN`
 - `D4`: `ALERT_LED_PIN` (optional alert LED)
 - `D9`: OLED `CLK`
 - `D10`: OLED `MOSI`

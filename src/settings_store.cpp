@@ -15,6 +15,7 @@ Settings makeDefault()
   settings.maxPulseUs = Config::PULSE_DEFAULT_MAX;
   settings.reverse = 0;
   settings.sweepCycleMs = Config::SWEEP_CYCLE_DEFAULT_MS;
+  settings.burnCycles = Config::BURN_CYCLES_DEFAULT;
   return settings;
 }
 
@@ -47,6 +48,11 @@ bool isValid(const Settings &settings)
   }
 
   if (settings.sweepCycleMs < Config::SWEEP_CYCLE_MIN_MS || settings.sweepCycleMs > Config::SWEEP_CYCLE_MAX_MS)
+  {
+    return false;
+  }
+
+  if (settings.burnCycles > Config::BURN_CYCLES_MAX)
   {
     return false;
   }
